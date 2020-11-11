@@ -1,12 +1,17 @@
-import { Space, Table, Tag } from "antd";
-import React from "react";
+import { DeleteFilled, EditFilled } from "@ant-design/icons";
+import { Modal, Space, Table, Tag } from "antd";
+import Link from "next/link";
+import React, { useContext } from "react";
+import { DataContext } from "./DataContext";
 
 export default function ContentTables() {
+	const {contentForm, data, setData} = useContext(DataContext);
+
 	const columns = [
 		{
 			title: "No",
-			dataIndex: "key",
-			key: "key",
+			dataIndex: "no",
+			key: "no",
 		},
 		{
 			title: "Title",
@@ -24,43 +29,42 @@ export default function ContentTables() {
 			key: "category",
 			render: tags => (
 				<>
-					{tags.map(tag => {
-						let color = tag.length > 5 ? "geekblue" : "green";
-						return (
-							<Tag color={color} key={tag}>
-								{tag.toUpperCase()}
-							</Tag>
-						);
-					})}
+					{tags.map(tag => (
+						<Tag color="grey" key={tag}>
+							{tag.toUpperCase()}
+						</Tag>
+					))}
 				</>
 			),
 		},
 		{
 			title: "Action",
-			key: "action",
+			dataIndex: "id",
+			key: "id",
 			render: (text, record) => (
+				//text refer to data id
 				<Space size="middle">
-					<a>Invite {record.name}</a>
-					<a>Delete</a>
+					<Link href={`/content/edit/${text}`}>
+						<EditFilled onClick={() => contentForm.setFieldsValue(record)} />
+					</Link>
+					<DeleteFilled
+						onClick={() =>
+							Modal.confirm({
+								title: "Delete content",
+								content: "Are you sure?",
+								centered: true,
+								// DELETE
+								onOk: () => {
+									let filteredData = data.filter(
+										content => content.id !== text
+									);
+									setData(filteredData.map((el, index) => ({...el, no: index + 1,})));
+								},
+							})
+						}
+					/>
 				</Space>
 			),
-		},
-	];
-
-	const data = [
-		{
-			key: "1",
-			title: "Game of Thrones",
-			description: "Daenrys die in the season finale",
-         category: ["war", "action"],
-         Questions: 15,
-		},
-		{
-			key: "2",
-			title: "The Queen's Gambit",
-			description: "Elizabeth likes to play chess",
-         category: ["chess", "drama"],
-         Questions: 8,
 		},
 	];
 
