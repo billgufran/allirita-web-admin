@@ -1,26 +1,30 @@
 import { DeleteFilled, EditFilled } from "@ant-design/icons";
 import { Form, Modal, Space, Table } from "antd";
-import Link from "next/link";
 import React, { useState } from "react";
 import QuizModal from "./QuizModal";
 
 export default function QuizTables() {
 	const [quizForm] = Form.useForm();
 
-
 	// TABLE
 	const dataSource = [
 		{
 			id: "1",
 			question: "How many people have died throughout the show?",
-			answer: "Too much",
-			wrong: ["55", "781", "None"],
+			firstOp: "one",
+			secondOp: "two",
+			thirdOp: "three",
+			fourthOp: "four",
+			correctAns: 3,
 		},
 		{
 			id: "2",
 			question: "Really",
-			answer: "Yes",
-			wrong: ["Perhaps", "No", "Maybe"],
+			firstOp: "Yes",
+			secondOp: "Perhaps",
+			thirdOp: "No",
+			fourthOp: "Maybe",
+			correctAns: 1,
 		},
 	];
 
@@ -51,14 +55,12 @@ export default function QuizTables() {
 			render: (text, record) => (
 				//text refer to data id
 				<Space size="middle">
-					<Link href={`/content/edit/${text}`}>
-						<EditFilled
-							onClick={() => {
-								quizForm.setFieldsValue(record);
-								setModalVisible(true);
-							}}
-						/>
-					</Link>
+					<EditFilled
+						onClick={() => {
+							quizForm.setFieldsValue(record);
+							setModalVisible(true);
+						}}
+					/>
 					<DeleteFilled
 						onClick={() =>
 							Modal.confirm({
