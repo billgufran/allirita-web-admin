@@ -4,7 +4,7 @@ import {
 	TeamOutlined
 } from "@ant-design/icons";
 import { Layout, Menu } from "antd";
-import Image from "next/image";
+// import Image from "next/image";
 import Link from "next/link";
 import React from "react";
 
@@ -20,12 +20,19 @@ export default function Sidebar({children}) {
 						mode="inline"
 						style={{height: "100%", borderRight: "1px solid lightgrey"}}
 					>
-						<Image
+						<img
 							src="/logo.png"
 							alt="Allirita logo"
 							height={79}
 							width={200}
 						/>
+						{/* Next.js image component */}
+						{/* <Image
+							src="/logo.png"
+							alt="Allirita logo"
+							height={79}
+							width={200}
+						/> */}
 						<Menu.Item key="1" icon={<AppstoreOutlined />}>
 							<Link href="/content/list">Content</Link>
 						</Menu.Item>
@@ -38,10 +45,6 @@ export default function Sidebar({children}) {
 					</Menu>
 				</Sider>
 				<Layout style={{padding: 24}}>
-					{/* <Breadcrumb style={{margin: "16px 0"}}>
-						<Breadcrumb.Item>Content</Breadcrumb.Item>
-						<Breadcrumb.Item>List</Breadcrumb.Item>
-					</Breadcrumb> */}
 					<Content
 						className="site-layout-background"
 						style={{
