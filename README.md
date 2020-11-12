@@ -2,22 +2,6 @@ This is a [Next.js](https://nextjs.org/) project bootstrapped with [`create-next
 
 ## Getting Started
 
-First, install all the dependencies:
-
-```bash
-npm install
-```
-
-To start the project in development mode:
-    
-```bash
-npm run dev
-```
-
-Open [http://localhost:3000](http://localhost:3000) with your browser to see the result.
-
-## Available Scripts
-
 Make sure to install all the dependencies first using `npm install`
 In the project directory, you can run:
 
