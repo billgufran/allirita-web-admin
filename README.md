@@ -2,29 +2,34 @@ This is a [Next.js](https://nextjs.org/) project bootstrapped with [`create-next
 
 ## Getting Started
 
-First, run the development server:
+First, install all the dependencies:
 
 ```bash
+npm install
+```
+
+To start the project in development mode:
+    
+```bash
 npm run dev
-# or
-yarn dev
 ```
 
 Open [http://localhost:3000](http://localhost:3000) with your browser to see the result.
 
-You can start editing the page by modifying `pages/index.js`. The page auto-updates as you edit the file.
+## Available Scripts
 
-## Learn More
+Make sure to install all the dependencies first using `npm install`
+In the project directory, you can run:
 
-To learn more about Next.js, take a look at the following resources:
+### `npm run dev`
 
-- [Next.js Documentation](https://nextjs.org/docs) - learn about Next.js features and API.
-- [Learn Next.js](https://nextjs.org/learn) - an interactive Next.js tutorial.
+Runs the project in the development mode.\
+Open [http://localhost:3000](http://localhost:3000) to view it in the browser.
 
-You can check out [the Next.js GitHub repository](https://github.com/vercel/next.js/) - your feedback and contributions are welcome!
+### `npm run build`
 
-## Deploy on Vercel
+Builds the app for production to the `.next` folder.
 
-The easiest way to deploy your Next.js app is to use the [Vercel Platform](https://vercel.com/import?utm_medium=default-template&filter=next.js&utm_source=create-next-app&utm_campaign=create-next-app-readme) from the creators of Next.js.
+### `npm run start` or `npm start`
 
-Check out our [Next.js deployment documentation](https://nextjs.org/docs/deployment) for more details.
+After building, `npm start` starts a Node.js server that supports hybrid pages, serving both statically generated and server-side rendered pages.
