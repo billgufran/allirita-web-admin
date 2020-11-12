@@ -1,7 +1,7 @@
 import { PlusOutlined } from "@ant-design/icons";
 import { Button } from "antd";
 import Link from "next/link";
-import ContentTables from "../../components/ContentTables";
+import ContentTable from "../../components/ContentTable";
 import Sidebar from "../../components/SidebarLayout";
 
 //path: /content/list
@@ -10,7 +10,7 @@ export default function ContentList() {
 	return (
 		<>
 			<Sidebar>
-				<ContentTables />
+				<ContentTable />
 				<Link href="/content/create">
 					<Button
 						type="primary"

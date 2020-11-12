@@ -3,7 +3,7 @@ import { Form, Modal, Space, Table } from "antd";
 import React, { useState } from "react";
 import QuizModal from "./QuizModal";
 
-export default function QuizTables() {
+export default function QuizTable() {
 	const [quizForm] = Form.useForm();
 
 	// TABLE

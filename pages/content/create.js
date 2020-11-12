@@ -2,7 +2,7 @@ import { Button, Card } from 'antd';
 import { useContext } from "react";
 import ContentForm from '../../components/ContentForm';
 import { DataContext } from '../../components/DataContext';
-import QuizTables from '../../components/QuizTables';
+import QuizTable from '../../components/QuizTable';
 import Sidebar from "../../components/SidebarLayout";
 
 //path: /content/create
@@ -17,7 +17,7 @@ export default function Edit() {
 				<Card bordered={ false } style={ { width: "100%" } } bodyStyle={ { padding: 0 } }>
 					<ContentForm />
 					<Card title="Quiz details" bordered={ false } style={ { width: "100%" } }>
-						<QuizTables />
+						<QuizTable />
 						<Button style={{textAlign: "right"}} onClick={ () => contentForm.submit() }>Save</Button>
 					</Card>
 				</Card>

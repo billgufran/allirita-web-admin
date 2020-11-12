@@ -4,7 +4,7 @@ import Link from "next/link";
 import React, { useContext } from "react";
 import { DataContext } from "./DataContext";
 
-export default function ContentTables() {
+export default function ContentTable() {
 	const {contentForm, data, setData} = useContext(DataContext);
 
 	const columns = [
