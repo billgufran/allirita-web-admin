@@ -1,4 +1,5 @@
 import App from "next/app";
+import Head from "next/head";
 import React from "react";
 import ContentProvider from "../components/ContentDataContext";
 import QuizProvider from "../components/QuizDataContext";
@@ -11,6 +12,10 @@ class MyApp extends App {
 		return (
 			<ContentProvider>
 				<QuizProvider>
+					<Head>
+						<title>Allirita Admin</title>
+						<link rel="icon" href="/favicon.ico" />
+					</Head>
 					<Component {...pageProps} />
 				</QuizProvider>
 			</ContentProvider>
