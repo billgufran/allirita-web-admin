@@ -1,7 +1,8 @@
 import { Button, Card } from 'antd';
-import { useContext } from "react";
+import { useContext, useEffect } from "react";
+import { ContentDataContext } from '../../components/ContentDataContext';
 import ContentForm from '../../components/ContentForm';
-import { DataContext } from '../../components/DataContext';
+import { QuizDataContext } from '../../components/QuizDataContext';
 import QuizTable from '../../components/QuizTable';
 import Sidebar from "../../components/SidebarLayout";
 
@@ -9,7 +10,14 @@ import Sidebar from "../../components/SidebarLayout";
 
 export default function Edit() {
 
-	const { contentForm } = useContext(DataContext)
+	const { contentForm } = useContext(ContentDataContext)
+	const { quizForm, setData } = useContext(QuizDataContext)
+
+	useEffect(() => {
+		contentForm.resetFields()
+		quizForm.resetFields()
+		setData([])
+	}, [])
 
 	return (
 		<>
