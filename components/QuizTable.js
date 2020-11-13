@@ -1,37 +1,16 @@
 import { DeleteFilled, EditFilled } from "@ant-design/icons";
-import { Form, Modal, Space, Table } from "antd";
-import React, { useState } from "react";
+import { Button, Modal, Space, Table } from "antd";
+import React, { useContext, useState } from "react";
+import { QuizDataContext } from "./QuizDataContext";
 import QuizModal from "./QuizModal";
 
 export default function QuizTable() {
-	const [quizForm] = Form.useForm();
+	const {quizForm, data, setData} = useContext(QuizDataContext);
+
+	// MODAL
+	const [modalVisible, setModalVisible] = useState(false);
 
 	// TABLE
-	const dataSource = [
-		{
-			id: "1",
-			question: "How many people have died throughout the show?",
-			firstOp: "one",
-			secondOp: "two",
-			thirdOp: "three",
-			fourthOp: "four",
-			correctAns: 3,
-		},
-		{
-			id: "2",
-			question: "Really",
-			firstOp: "Yes",
-			secondOp: "Perhaps",
-			thirdOp: "No",
-			fourthOp: "Maybe",
-			correctAns: 1,
-		},
-	];
-
-	const [data, setData] = useState(
-		dataSource.map((el, index) => ({no: index + 1, ...el}))
-	);
-
 	const columns = [
 		{
 			title: "No",
@@ -87,12 +66,15 @@ export default function QuizTable() {
 		},
 	];
 
-	// MODAL
-	const [modalVisible, setModalVisible] = useState(false);
+	const footer = () => (
+		<Button type="link" onClick={() => setModalVisible(true)}>
+			Add Question
+		</Button>
+	);
 
 	return (
 		<>
-			<Table columns={columns} dataSource={data} />
+			<Table columns={columns} dataSource={data} footer={footer} />
 			<QuizModal
 				quizForm={quizForm}
 				visible={modalVisible}
