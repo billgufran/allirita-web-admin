@@ -30,7 +30,7 @@ export default function QuizModal({ visible, setVisible, quizForm }) {
         onFinish={ onSubmit }
       >
         <Form.Item label="Question" name="question">
-          <Input.TextArea />
+          <Input.TextArea placeholder="Type the question..." />
         </Form.Item>
         <Form.Item label="Answer" name="correctAns">
           <Radio.Group>
@@ -52,7 +52,7 @@ function Option({value, id}) {
         <Radio value={id} />
       </Form.Item>
       <Form.Item name={value}>
-        <Input bordered={ false } />
+        <Input bordered={ false } placeholder="Type the answer..." />
       </Form.Item>
     </Input.Group>
   )

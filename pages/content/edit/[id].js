@@ -1,8 +1,8 @@
 import { Button, Card } from 'antd';
 import { useRouter } from "next/router";
 import { useContext } from "react";
+import { ContentDataContext } from '../../../components/ContentDataContext';
 import ContentForm from '../../../components/ContentForm';
-import { DataContext } from '../../../components/DataContext';
 import QuizTable from '../../../components/QuizTable';
 import Sidebar from "../../../components/SidebarLayout";
 
@@ -13,7 +13,7 @@ export default function Edit() {
 	const router = useRouter();
 	const { id } = router.query;
 
-	const { contentForm } = useContext(DataContext)
+	const { contentForm } = useContext(ContentDataContext)
 
 
 	return (

@@ -1,31 +1,31 @@
 import { Card, Form, Input, Select } from "antd";
 import { useCallback, useContext } from "react";
-import { DataContext } from "./DataContext";
+import { ContentDataContext } from "./ContentDataContext";
 
 export default function ContentForm({id}) {
 	const {Option} = Select;
 
-	const {contentForm, setData, data, postData} = useContext(DataContext)
+	const {contentForm, setData, data, postData} = useContext(
+		ContentDataContext
+	);
 
 	const updateData = (value, id) => {
 		// PUT
 		let newData = data.map(content => {
-			if(content.id === id) {
-				content = {...content, ...value}
+			if (content.id === id) {
+				content = {...content, ...value};
 			}
-			return content
-		})
-		setData(newData)
-	}
+			return content;
+		});
+		setData(newData);
+	};
 
-	const onSubmit = useCallback((value) => {
+	const onSubmit = useCallback(value => {
+		id ? updateData(value, id) : postData(value);
 
-		id
-			 ? updateData(value, id)
-			 : postData(value)
+		alert("form submitted");
+	}, []);
 
-		alert('form submitted')
-  }, [])
 
 	return (
 		<Card title="Content details" bordered={false} style={{width: "100%"}}>
@@ -36,10 +36,32 @@ export default function ContentForm({id}) {
 				name="content-form"
 				onFinish={onSubmit}
 			>
-				<Form.Item label="Title" name="title">
+				<Form.Item
+					label="Title"
+					name="title"
+					rules={[
+						{
+							required: true,
+							message: "Please fill content's title",
+							type: "string",
+							whitespace: true,
+						},
+					]}
+				>
 					<Input />
 				</Form.Item>
-				<Form.Item label="Description" name="description">
+				<Form.Item
+					label="Description"
+					name="description"
+					rules={[
+						{
+							required: true,
+							message: "Please fill content's description",
+							type: "string",
+							whitespace: true,
+						},
+					]}
+				>
 					<Input.TextArea />
 				</Form.Item>
 				<Form.Item
@@ -63,7 +85,18 @@ export default function ContentForm({id}) {
 						<Option value="war">War</Option>
 					</Select>
 				</Form.Item>
-				<Form.Item label="Video URL" name="url">
+				<Form.Item
+					label="Video URL"
+					name="url"
+					rules={[
+						{
+							required: true,
+							message: "Please fill content's URL",
+							type: "string",
+							whitespace: true,
+						},
+					]}
+				>
 					<Input />
 				</Form.Item>
 			</Form>

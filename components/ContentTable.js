@@ -2,10 +2,10 @@ import { DeleteFilled, EditFilled } from "@ant-design/icons";
 import { Modal, Space, Table, Tag } from "antd";
 import Link from "next/link";
 import React, { useContext } from "react";
-import { DataContext } from "./DataContext";
+import { ContentDataContext } from "./ContentDataContext";
 
 export default function ContentTable() {
-	const {contentForm, data, setData} = useContext(DataContext);
+	const {contentForm, data, setData} = useContext(ContentDataContext);
 
 	const columns = [
 		{
