@@ -1,6 +1,7 @@
 import App from "next/app";
 import React from "react";
-import DataProvider from "../components/DataContext";
+import ContentProvider from "../components/ContentDataContext";
+import QuizProvider from "../components/QuizDataContext";
 import "../styles/antd.less";
 
 class MyApp extends App {
@@ -8,9 +9,11 @@ class MyApp extends App {
 		const {Component, pageProps} = this.props;
 
 		return (
-			<DataProvider>
-				<Component {...pageProps} />
-			</DataProvider>
+			<ContentProvider>
+				<QuizProvider>
+					<Component {...pageProps} />
+				</QuizProvider>
+			</ContentProvider>
 		);
 	}
 }

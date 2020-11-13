@@ -1,9 +1,9 @@
 import Form from 'antd/lib/form';
 import React, { createContext, useState } from "react";
 
-export const DataContext = createContext();
+export const ContentDataContext = createContext();
 
-export default function DataProvider({children}) {
+export default function ContentProvider({children}) {
    const dataSource = [
 		{
 			id: "1",
@@ -41,8 +41,8 @@ export default function DataProvider({children}) {
 	};
 
 	return (
-		<DataContext.Provider value={value}>
+		<ContentDataContext.Provider value={value}>
 			{children}
-		</DataContext.Provider>
+		</ContentDataContext.Provider>
 	);
 }
