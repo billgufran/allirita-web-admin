@@ -30,7 +30,7 @@ export default function ContentTable() {
 			render: tags => (
 				<>
 					{tags.map(tag => (
-						<Tag color="grey" key={tag}>
+						<Tag key={tag}>
 							{tag.toUpperCase()}
 						</Tag>
 					))}

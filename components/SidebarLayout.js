@@ -14,7 +14,7 @@ export default function Sidebar({children}) {
 	return (
 		<>
 			<Layout style={{minHeight: "100vh"}}>
-				<Sider width={200} className="site-layout-background">
+				<Sider width={200}>
 					<Menu
 						defaultSelectedKeys={["1"]}
 						mode="inline"
@@ -26,13 +26,6 @@ export default function Sidebar({children}) {
 							height={79}
 							width={200}
 						/>
-						{/* Next.js image component */}
-						{/* <Image
-							src="/logo.png"
-							alt="Allirita logo"
-							height={79}
-							width={200}
-						/> */}
 						<Menu.Item key="1" icon={<AppstoreOutlined />}>
 							<Link href="/content/list">Content</Link>
 						</Menu.Item>
@@ -46,10 +39,12 @@ export default function Sidebar({children}) {
 				</Sider>
 				<Layout style={{padding: 24}}>
 					<Content
-						className="site-layout-background"
 						style={{
 							margin: 0,
-							minHeight: 280,
+							height: "100%",
+							display: "flex",
+							flexDirection: "column",
+							justifyContent: "space-between",
 						}}
 					>
 						{children}

@@ -17,6 +17,7 @@ export default function ContentList() {
 						shape="round"
 						icon={<PlusOutlined />}
 						size="large"
+						style={{alignSelf: "flex-end"}}
 					>
 						New Item
 					</Button>

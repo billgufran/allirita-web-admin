@@ -24,9 +24,15 @@ export default function Edit() {
 			<Sidebar>
 				<Card bordered={ false } style={ { width: "100%" } } bodyStyle={ { padding: 0 } }>
 					<ContentForm />
-					<Card title="Quiz details" bordered={ false } style={ { width: "100%" } }>
+					<Card title="Quiz details" bordered={ false } style={{width: "100%"}}>
 						<QuizTable />
-						<Button style={{textAlign: "right"}} onClick={ () => contentForm.submit() }>Save</Button>
+						<Button
+							onClick={ () => contentForm.submit()}
+							type="primary"
+							style={{alignSelf: "flex-end", marginTop: 20}}
+						>
+							Save
+						</Button>
 					</Card>
 				</Card>
 			</Sidebar>

@@ -32,10 +32,10 @@ export default function QuizProvider({children}) {
 		dataSource.map((el, index) => ({no: index + 1, ...el}))
    );
 
-   // GET DATA
+   // GET QUIZ
    const getData = () => setData(dataSource.map((el, index) => ({no: index + 1, ...el})))
 
-   // POST DATA
+   // POST QUIZ
 	const postData = newData => {
 		newData.id = Math.floor(Math.random() * Math.floor(100))
 		setData([...data, newData])
