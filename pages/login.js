@@ -1,32 +1,29 @@
 import { LockOutlined, UserOutlined } from "@ant-design/icons";
 import { Button, Card, Form, Input, Layout } from "antd";
+import { useRouter } from 'next/router';
 import React from "react";
 
-const {Content, Header} = Layout;
+const {Content} = Layout;
 
 export default function Login() {
 	const onFinish = values => {
 		console.log("Received values of form: ", values);
 	};
 
+	const router = useRouter()
+
 	return (
 		<Layout style={{minHeight: "100vh"}}>
-			<Header style={{
-				backgroundColor: "#F0F2F5",
-				display: "flex",
-				justifyContent: "center",
-				alignItems: "center",
-			}}>
-				<img src="/logo.png" alt="Allirita logo" width={300} />
-			</Header>
 			<Content
 				style={{
 					height: "100%",
 					display: "flex",
+					flexDirection: "column",
 					justifyContent: "center",
 					alignItems: "center",
 				}}
 			>
+				<img src="/logo.png" alt="Allirita logo" width={300} />
 				<Card style={{minWidth: 350}}>
 					<Form
 						name="normal_login"
@@ -68,24 +65,16 @@ export default function Login() {
 								placeholder="Password"
 							/>
 						</Form.Item>
-						{/* <Form.Item>
-					<Form.Item name="remember" valuePropName="checked" noStyle>
-						<Checkbox>Remember me</Checkbox>
-					</Form.Item>
-					<a className="login-form-forgot" href="">
-                  Forgot password
-               </a>
-				</Form.Item> */}
-
 						<Form.Item>
 							<Button
 								type="primary"
 								htmlType="submit"
 								style={{width: "100%"}}
+								onClick={router.push("/content/list")}
 							>
 								Log in
 							</Button>
-							{/* Or <a href="">register now!</a> */}
+							{/* Or <a href="">Create account</a> */}
 						</Form.Item>
 					</Form>
 				</Card>
