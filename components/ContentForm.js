@@ -1,4 +1,5 @@
-import { Card, Form, Input, Select } from "antd";
+import { UploadOutlined } from "@ant-design/icons";
+import { Button, Card, Form, Input, Select, Upload } from "antd";
 import { useCallback, useContext } from "react";
 import { ContentDataContext } from "./ContentDataContext";
 
@@ -25,7 +26,6 @@ export default function ContentForm({id}) {
 
 		alert("form submitted");
 	}, []);
-
 
 	return (
 		<Card title="Content details" bordered={false} style={{width: "100%"}}>
@@ -98,6 +98,14 @@ export default function ContentForm({id}) {
 					]}
 				>
 					<Input />
+				</Form.Item>
+				<Form.Item
+					label="Upload thumbnail"
+					name="thumbnail"
+				>
+					<Upload name="logo" action="/upload.do" listType="picture">
+						<Button icon={<UploadOutlined />}>Click to upload</Button>
+					</Upload>
 				</Form.Item>
 			</Form>
 		</Card>
