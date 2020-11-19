@@ -1,4 +1,4 @@
-import { Button, Card } from 'antd';
+import { Button, Card, Switch } from 'antd';
 import { useRouter } from "next/router";
 import { useContext } from "react";
 import { ContentDataContext } from '../../../components/ContentDataContext';
@@ -26,6 +26,7 @@ export default function Edit() {
 						bordered={ false }
 						style={{ width: "100%" }}
 						bodyStyle={{display: "flex", flexDirection: "column"}}
+						extra={<Switch defaultChecked/>}
 					>
 						<QuizTable />
 						<Button

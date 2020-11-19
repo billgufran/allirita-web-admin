@@ -30,6 +30,7 @@ export default function Edit() {
 							onClick={ () => contentForm.submit()}
 							type="primary"
 							style={{alignSelf: "flex-end", marginTop: 20}}
+							extra={<Switch defaultChecked/>}
 						>
 							Save
 						</Button>
