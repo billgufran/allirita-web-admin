@@ -33,7 +33,8 @@ export default function Sidebar({children}) {
 							<Link href="/content/list">Users</Link>
 						</Menu.Item>
 						<Menu.Item key="3" icon={<ImportOutlined />}>
-							Logout
+							{/* TO DO: remove login info */}
+							<Link href="/login">Logout</Link>
 						</Menu.Item>
 					</Menu>
 				</Sider>
