@@ -1,6 +1,6 @@
 import { Button, Card, Switch } from 'antd';
 import { useRouter } from "next/router";
-import { useContext } from "react";
+import { useContext, useState } from "react";
 import { ContentDataContext } from '../../../components/ContentDataContext';
 import ContentForm from '../../../components/ContentForm';
 import QuizTable from '../../../components/QuizTable';
@@ -14,6 +14,12 @@ export default function Edit() {
 	const { id } = router.query;
 
 	const { contentForm } = useContext(ContentDataContext)
+	const [hasQuiz, setHasQuiz] = useState(true)
+
+	const toggleQuiz = () => {
+		setHasQuiz(false)
+		console.log(hasQuiz)
+	}
 
 
 	return (
@@ -26,9 +32,9 @@ export default function Edit() {
 						bordered={ false }
 						style={{ width: "100%" }}
 						bodyStyle={{display: "flex", flexDirection: "column"}}
-						extra={<Switch defaultChecked/>}
+						extra={<Switch defaultChecked onChange={toggleQuiz}/>}
 					>
-						<QuizTable />
+						{hasQuiz && <QuizTable /> }
 						<Button
 							onClick={ () => contentForm.submit()}
 							type="primary"
