@@ -1,6 +1,7 @@
 import { LockOutlined, UserOutlined } from "@ant-design/icons";
 import { Button, Card, Form, Input, Layout } from "antd";
-import { useRouter } from 'next/router';
+import Link from "next/link";
+import { useRouter } from "next/router";
 import React from "react";
 
 const {Content} = Layout;
@@ -10,7 +11,9 @@ export default function Login() {
 		console.log("Received values of form: ", values);
 	};
 
-	const router = useRouter()
+	const router = useRouter();
+
+	console.log(router.pathname);
 
 	return (
 		<Layout style={{minHeight: "100vh"}}>
@@ -66,14 +69,15 @@ export default function Login() {
 							/>
 						</Form.Item>
 						<Form.Item>
-							<Button
-								type="primary"
-								htmlType="submit"
-								style={{width: "100%"}}
-								onClick={router.push("/content/list")}
-							>
-								Log in
-							</Button>
+							<Link href="/content/list">
+								<Button
+									type="primary"
+									htmlType="submit"
+									style={{width: "100%"}}
+								>
+									Log in
+								</Button>
+							</Link>
 							{/* Or <a href="">Create account</a> */}
 						</Form.Item>
 					</Form>
