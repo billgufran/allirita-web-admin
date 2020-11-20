@@ -9,8 +9,6 @@ export default function Home() {
 	const router = useRouter()
 
 	useEffect(() => {
-
-		//logged in? router.push("/content/list") : router.push("/login")
 		router.push("/login")
 	}, [])
 
