@@ -18,7 +18,6 @@ export default function Edit() {
 
 	const toggleQuiz = () => {
 		setHasQuiz(false)
-		console.log(hasQuiz)
 	}
 
 

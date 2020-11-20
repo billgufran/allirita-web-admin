@@ -22,7 +22,6 @@ export default function Edit() {
 
 	const toggleQuiz = () => {
 		setHasQuiz(prevState => !prevState);
-		console.log(hasQuiz);
 	};
 
 	return (
