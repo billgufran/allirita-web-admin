@@ -34,6 +34,7 @@ export default function AuthProvider(props) {
 
 	const router = useRouter();
 
+	//redirect if not logged in
 	useEffect(() => {
 		const handleRouteChange = url => {
 			if (url !== "/login" && !user) {
@@ -50,6 +51,7 @@ export default function AuthProvider(props) {
 			router.events.off("routeChangeStart", handleRouteChange);
 		};
 	}, [user]);
+
 
 	const login = async (email, password) => {
 		const res = await api.post(
