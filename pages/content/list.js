@@ -9,12 +9,12 @@ import api from "../../services/api";
 //path: /content/list
 
 export default function ContentList() {
-	const [konten, setKonten] = useState(null)
+	const [content, setContent] = useState(null)
 
 	const getKonten = async () => {
 		try {
 			const result = await api.get("/konten")
-			setKonten(result.data.getKonten)
+			setContent(result.data.getKonten)
 		} catch (error) {
 			console.log(error)
 		}
@@ -28,7 +28,7 @@ export default function ContentList() {
 	return (
 		<>
 			<Sidebar>
-				<ContentTable konten={konten} getKonten={getKonten} />
+				<ContentTable content={content} getContent={getKonten} />
 				<Link href="/content/create">
 					<Button
 						type="primary"
