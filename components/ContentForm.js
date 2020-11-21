@@ -1,30 +1,32 @@
 import { UploadOutlined } from "@ant-design/icons";
 import { Button, Card, Form, Input, Select, Upload } from "antd";
-import { useCallback, useContext } from "react";
-import { ContentDataContext } from "./ContentDataContext";
+import { useCallback } from "react";
+import api from "../services/api";
 
-export default function ContentForm({id}) {
-	const {Option} = Select;
+const {Option} = Select;
 
-	const {contentForm, setData, data, postData} = useContext(
-		ContentDataContext
-	);
+export default function ContentForm({id_konten, contentForm}) {
 
-	const updateData = (value, id) => {
+	const updateContent = async (val, id) => {
 		// PUT
-		let newData = data.map(content => {
-			if (content.id === id) {
-				content = {...content, ...value};
-			}
-			return content;
-		});
-		setData(newData);
+		try {
+			api.put(`/konten/${id}`,val)
+		} catch (error) {
+			console.log(error)
+		}
 	};
 
-	const onSubmit = useCallback(value => {
-		id ? updateData(value, id) : postData(value);
+	const createContent = value => {
+		// POST
+		try {
+			api.post("/konten",val)
+		} catch (error) {
+			console.log(error)
+		}
+	}
 
-		alert("form submitted");
+	const onSubmit = useCallback(value => {
+		id_konten ? updateContent(value, id_konten) : createContent(value);
 	}, []);
 
 	return (
@@ -38,7 +40,7 @@ export default function ContentForm({id}) {
 			>
 				<Form.Item
 					label="Title"
-					name="title"
+					name="judul"
 					rules={[
 						{
 							required: true,
@@ -52,7 +54,7 @@ export default function ContentForm({id}) {
 				</Form.Item>
 				<Form.Item
 					label="Description"
-					name="description"
+					name="deskripsi"
 					rules={[
 						{
 							required: true,
@@ -64,9 +66,9 @@ export default function ContentForm({id}) {
 				>
 					<Input.TextArea />
 				</Form.Item>
-				<Form.Item
+				{/* <Form.Item
 					label="Category"
-					name="category"
+					name="kategori"
 					rules={[
 						{
 							required: true,
@@ -84,10 +86,23 @@ export default function ContentForm({id}) {
 						<Option value="drama">Drama</Option>
 						<Option value="war">War</Option>
 					</Select>
+				</Form.Item> */}
+				<Form.Item
+					label="Category"
+					name="kategori"
+					rules={[
+						{
+							required: true,
+							message: "Please fill content's category",
+							type: "string",
+						},
+					]}
+				>
+					<Input />
 				</Form.Item>
 				<Form.Item
 					label="Video URL"
-					name="url"
+					name="video"
 					rules={[
 						{
 							required: true,

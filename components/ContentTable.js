@@ -1,17 +1,15 @@
 import { DeleteFilled, EditFilled } from "@ant-design/icons";
 import { Modal, Space, Table, Tag } from "antd";
 import Link from "next/link";
-import React, { useContext } from "react";
+import React from "react";
 import api from "../services/api";
-import { ContentDataContext } from "./ContentDataContext";
 
-export default function ContentTable({data, getData}) {
-	const {contentForm, setData} = useContext(ContentDataContext);
+export default function ContentTable({content, getContent}) {
 
 	const deleteData = async (id) => {
 		try {
 			await api.delete(`/konten/${id}`)
-			getData()
+			getContent()
 		} catch (error) {
 			console.log(error)
 		}
@@ -55,7 +53,7 @@ export default function ContentTable({data, getData}) {
 				//text refer to data id
 				<Space size="middle">
 					<Link href={`/content/edit/${text}`}>
-						<EditFilled onClick={() => contentForm.setFieldsValue(record)} />
+						<EditFilled />
 					</Link>
 					<DeleteFilled
 						onClick={() =>
@@ -81,7 +79,7 @@ export default function ContentTable({data, getData}) {
 
 	return (
 		<>
-			<Table columns={columns} dataSource={data} />
+			<Table columns={columns} dataSource={content} />
 		</>
 	);
 }
