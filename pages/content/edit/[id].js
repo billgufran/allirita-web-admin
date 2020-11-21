@@ -17,8 +17,8 @@ export default function Edit() {
 	const [hasQuiz, setHasQuiz] = useState(true)
 
 	const toggleQuiz = () => {
-		setHasQuiz(false)
-	}
+		setHasQuiz(prevState => !prevState);
+	};
 
 
 	return (
