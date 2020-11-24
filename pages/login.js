@@ -8,7 +8,7 @@ const {Content} = Layout;
 
 export default function Login() {
 
-	const {login} = useContext(AuthContext);
+	const {login, isLoading} = useContext(AuthContext);
 
 	const onFinish = values => {
 		const {email, password} = values
@@ -72,6 +72,7 @@ export default function Login() {
 								type="primary"
 								htmlType="submit"
 								style={{width: "100%", marginBottom: 7}}
+								loading={isLoading}
 							>
 								Log in
 							</Button>
