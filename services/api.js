@@ -1,7 +1,7 @@
 import axios from "axios";
 
 const api = axios.create({
-    baseURL: "https://projects.upanastudio.com/allirita-api",
+    baseURL: "https://allirita-api.upanastudio.com/api",
 });
 
 export default api;
