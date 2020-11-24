@@ -1,5 +1,5 @@
 import { useRouter } from "next/router";
-import { createContext, useState } from "react";
+import { createContext, useEffect, useState } from "react";
 import api from "../services/api";
 
 //Custom hooks to set localStorage
@@ -33,55 +33,59 @@ export default function AuthProvider(props) {
 
 	//	CHANGE THIS TO NULL BEFORE PROD
 	const [user, setUser] = useLocalStorage("user", null);
+	const [isLoading, setIsLoading] = useState(false);
 
 	const router = useRouter();
 
-	//redirect if not logged in
-	// useEffect(() => {
-	// 	const handleRouteChange = url => {
-	// 		if (url !== "/login" && url !== "/signup" && !user) {
-	// 			router.push("/login");
-	// 		}
-	// 	};
+	useEffect(() => {
+		// redirect if not logged in
+		const handleRouteChange = url => {
+			if (url !== "/login" && url !== "/signup" && !user) {
+				router.push("/login");
+			}
+		};
 
-	// 	if (router.pathname !== "/login" && router.pathname !== "/signup" && user === null) {
-	// 		router.push("/login");
-	// 	}
+		if (
+			router.pathname !== "/login" &&
+			router.pathname !== "/signup" &&
+			user === null
+		) {
+			router.push("/login");
+		}
 
-	// 	router.events.on("routeChangeStart", handleRouteChange);
-	// 	return () => {
-	// 		router.events.off("routeChangeStart", handleRouteChange);
-	// 	};
-	// }, [user]);
-
+		router.events.on("routeChangeStart", handleRouteChange);
+		return () => {
+			router.events.off("routeChangeStart", handleRouteChange);
+		};
+	}, [user]);
 
 	const login = async (email, password) => {
-		const res = await api.post(
-			"/login",
-			{
+		try {
+			setIsLoading(true);
+			const res = await api.post("/akun/masuk", {
 				email,
 				password,
-			}
-		);
-		setUser({email, token: res.data.token});
-      api.defaults.headers.Authorization = `Bearer ${res.data.token}`;
+			});
+			setUser({email, token: res.data.data.token});
+			router.push("/content/list");
+		} catch (err) {
+			console.log(err);
+		} finally {
+			setIsLoading(false);
+		}
 	};
 
 	const logout = () => {
 		setUser(null);
-		delete api.defaults.headers.Authorization;
 	};
 
 	const signUp = (name, email, password) => {
-		api.post(
-			"/register",
-			{
-				name,
-				email,
-				password,
-			}
-		);
-	}
+		api.post("/register", {
+			name,
+			email,
+			password,
+		});
+	};
 
 	const value = {
 		login,
@@ -89,6 +93,7 @@ export default function AuthProvider(props) {
 		isAuthenticated: !!user,
 		user,
 		signUp,
+		isLoading,
 	};
 
 	return (

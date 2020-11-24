@@ -1,14 +1,21 @@
 import { DeleteFilled, EditFilled } from "@ant-design/icons";
 import { Modal, Space, Table, Tag } from "antd";
 import Link from "next/link";
-import React from "react";
+import { useContext } from "react";
 import api from "../services/api";
+import { AuthContext } from "./AuthContext";
 
 export default function ContentTable({content, getContent, isLoading}) {
 
-	const deleteData = async (id) => {
+	const {user} = useContext(AuthContext)
+
+	const deleteData = async (id_konten) => {
 		try {
-			await api.delete(`/konten/${id}`)
+			// API: delete konten/video
+			await api.delete(
+				`/konten/${id_konten}`,
+				{headers: {Authorization: `Bearer ${user.token}`}}
+			)
 			getContent()
 		} catch (error) {
 			console.log(error)
@@ -80,7 +87,6 @@ export default function ContentTable({content, getContent, isLoading}) {
 								title: "Delete content",
 								content: "Are you sure?",
 								centered: true,
-								// DELETE
 								onOk: () => {
 									deleteData(text)
 								},

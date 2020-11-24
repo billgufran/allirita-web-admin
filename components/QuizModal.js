@@ -1,23 +1,48 @@
 import { Form, Input, Modal, Radio } from "antd";
-import React from "react";
+import { useContext } from "react";
+import api from "../services/api";
+import { AuthContext } from "./AuthContext";
 
-export default function QuizModal({ visible, setVisible, quizForm, id }) {
+export default function QuizModal({ visible, setVisible, quizForm, id, getSelectedContent }) {
 
+  const {user} = useContext(AuthContext)
   const {id_konten, id_pertanyaan} = id
 
-  const onSubmit = async value => {
+  const updateQuiz = async value => {
     try {
       //API: PUT update pertanyaan/kuis
-      await api.put(`/konten/${id_konten}/pertanyaan/${id_pertanyaan}`, value)
-      setVisible(false);
+      await api.put(
+        `/konten/${id_konten}/pertanyaan/${id_pertanyaan}`,
+        value,
+        {headers: {Authorization: `Bearer ${user.token}`}}
+      )
     } catch (error) {
       console.log(error)
     }
-  };
+  }
+
+  const createQuiz = async value => {
+    try {
+      //API: POST create pertanyaan/kuis
+      await api.post(
+        `/konten/${id_konten}/pertanyaan`,
+        value,
+        {headers: {Authorization: `Bearer ${user.token}`}}
+      )
+    } catch (error) {
+      console.log(error)
+    }
+  }
+
+  const onSubmit = value => {
+    id_pertanyaan ? updateQuiz(value) : createQuiz(value)
+    setVisible(false);
+    getSelectedContent(id_konten)
+  }
 
   const onCancel = () => {
-    quizForm.resetFields();
     setVisible(false);
+    quizForm.resetFields();
   };
 
   return (
