@@ -13,7 +13,7 @@ export default function DetailViewLayout({id_konten}) {
 
    const [hasQuiz, setHasQuiz] = useState(true)
 	const [quizzes, setQuizzes ] = useState([])
-	const [isLoading, setIsLoading] = useState(true);
+	const [isLoading, setIsLoading] = useState(false);
 
 	const {user} = useContext(AuthContext)
 
