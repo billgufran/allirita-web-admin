@@ -9,9 +9,5 @@ export default function Edit() {
 	const router = useRouter();
 	const {id_konten} = router.query;
 
-	return (
-		<>
-			<DetailViewLayout id_konten={id_konten} />
-		</>
-	);
+	return <DetailViewLayout id_konten={id_konten} />
 }

@@ -4,10 +4,5 @@ import DetailViewLayout from '../../components/DetailViewLayout';
 
 export default function Edit() {
 
-
-	return (
-		<>
-			<DetailViewLayout isCreate />
-		</>
-	);
+	return <DetailViewLayout />
 }
