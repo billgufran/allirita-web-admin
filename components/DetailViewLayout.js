@@ -23,8 +23,8 @@ export default function DetailViewLayout({id_konten, isCreate}) {
 		try {
 			// API: GET edit konten/video
 			const res = await api.get(`/konten/${id_konten}/edit`)
-			contentForm.setFieldsValue(res.data.getKonten)
-			setQuizzes(res.data.pertanyaan)
+			contentForm.setFieldsValue(res.data.data.getKonten)
+			setQuizzes(res.data.data.pertanyaan)
 		} catch (error) {
 			console.log(error)
 		}

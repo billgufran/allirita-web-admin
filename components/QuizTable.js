@@ -53,15 +53,7 @@ export default function QuizTable({quizzes}) {
 								centered: true,
 								// QUIZ DELETE
 								onOk: () => {
-									let filteredData = data.filter(
-										content => content.id !== text
-									);
-									setData(
-										filteredData.map((el, index) => ({
-											...el,
-											no: index + 1,
-										}))
-									);
+									deleteData()
 								},
 							})
 						}

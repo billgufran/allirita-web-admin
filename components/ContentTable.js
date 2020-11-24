@@ -4,7 +4,7 @@ import Link from "next/link";
 import React from "react";
 import api from "../services/api";
 
-export default function ContentTable({content, getContent}) {
+export default function ContentTable({content, getContent, isLoading}) {
 
 	const deleteData = async (id) => {
 		try {
@@ -31,26 +31,45 @@ export default function ContentTable({content, getContent}) {
 			dataIndex: "deskripsi",
 			key: "deskripsi",
 		},
+		// {
+		// 	title: "Category",
+		// 	dataIndex: "kategori",
+		// 	key: "kategori",
+		// 	render: tags => (
+		// 		<>
+		// 			{tags.map(tag => (
+		// 				<Tag key={tag}>
+		// 					{tag.toUpperCase()}
+		// 				</Tag>
+		// 			))}
+		// 		</>
+		// 	),
+		// },
 		{
 			title: "Category",
 			dataIndex: "kategori",
 			key: "kategori",
-			render: tags => (
-				<>
-					{tags.map(tag => (
-						<Tag key={tag}>
-							{tag.toUpperCase()}
-						</Tag>
-					))}
-				</>
-			),
+			render: categories => {
+				let arr = categories.split(",")
+				return (
+					<>
+						{
+							arr.map(category => (
+								<Tag key={category}>
+									{category.trim().toUpperCase()}
+								</Tag>
+							))
+						}
+					</>
+				)
+			}
 		},
 		{
 			title: "Action",
 			dataIndex: "id_konten",
 			key: "id_konten",
 			render: (text, record) => (
-				//text refer to data id
+				//"text" refer to data id
 				<Space size="middle">
 					<Link href={`/content/edit/${text}`}>
 						<EditFilled />
@@ -63,10 +82,6 @@ export default function ContentTable({content, getContent}) {
 								centered: true,
 								// DELETE
 								onOk: () => {
-									// let filteredData = data.filter(
-									// 	content => content.id !== text
-									// );
-									// setData(filteredData.map((el, index) => ({...el, no: index + 1,})));
 									deleteData(text)
 								},
 							})
@@ -79,7 +94,7 @@ export default function ContentTable({content, getContent}) {
 
 	return (
 		<>
-			<Table columns={columns} dataSource={content} />
+			<Table columns={columns} dataSource={content} loading={isLoading}/>
 		</>
 	);
 }

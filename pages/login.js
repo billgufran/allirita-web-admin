@@ -1,16 +1,19 @@
 import { LockOutlined, UserOutlined } from "@ant-design/icons";
 import { Button, Card, Form, Input, Layout } from "antd";
-import { useRouter } from 'next/router';
-import React from "react";
+import Link from "next/link";
+import React, { useContext } from "react";
+import { AuthContext } from "../components/AuthContext";
 
 const {Content} = Layout;
 
 export default function Login() {
-	const onFinish = values => {
-		console.log("Received values of form: ", values);
-	};
 
-	const router = useRouter()
+	const {login} = useContext(AuthContext);
+
+	const onFinish = values => {
+		const {email, password} = values
+		login(email, password)
+	};
 
 	return (
 		<Layout style={{minHeight: "100vh"}}>
@@ -26,18 +29,18 @@ export default function Login() {
 				<img src="/logo.png" alt="Allirita logo" width={300} />
 				<Card style={{minWidth: 350}}>
 					<Form
-						name="normal_login"
+						name="login"
 						initialValues={{
 							remember: true,
 						}}
 						onFinish={onFinish}
 					>
 						<Form.Item
-							name="username"
+							name="email"
 							rules={[
 								{
 									required: true,
-									message: "Please input your Username!",
+									message: "Please input your Email!",
 								},
 							]}
 						>
@@ -45,7 +48,7 @@ export default function Login() {
 								prefix={
 									<UserOutlined className="site-form-item-icon" />
 								}
-								placeholder="Username"
+								placeholder="Email"
 							/>
 						</Form.Item>
 						<Form.Item
@@ -57,11 +60,10 @@ export default function Login() {
 								},
 							]}
 						>
-							<Input
+							<Input.Password
 								prefix={
 									<LockOutlined className="site-form-item-icon" />
 								}
-								type="password"
 								placeholder="Password"
 							/>
 						</Form.Item>
@@ -69,12 +71,12 @@ export default function Login() {
 							<Button
 								type="primary"
 								htmlType="submit"
-								style={{width: "100%"}}
-								onClick={router.push("/content/list")}
+								style={{width: "100%", marginBottom: 7}}
 							>
 								Log in
 							</Button>
-							{/* Or <a href="">Create account</a> */}
+							Or&nbsp;
+							<Link href="/signup">Sign Up</Link>
 						</Form.Item>
 					</Form>
 				</Card>

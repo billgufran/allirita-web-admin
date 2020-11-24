@@ -4,13 +4,16 @@ import {
 	TeamOutlined
 } from "@ant-design/icons";
 import { Layout, Menu } from "antd";
-// import Image from "next/image";
 import Link from "next/link";
-import React from "react";
+import { useContext } from "react";
+import { AuthContext } from "./AuthContext";
 
 const {Content, Sider} = Layout;
 
 export default function Sidebar({children}) {
+
+	const {logout} = useContext(AuthContext);
+
 	return (
 		<>
 			<Layout style={{minHeight: "100vh"}}>
@@ -30,10 +33,9 @@ export default function Sidebar({children}) {
 							<Link href="/content/list">Content</Link>
 						</Menu.Item>
 						<Menu.Item key="2" icon={<TeamOutlined />}>
-							<Link href="/content/list">Users</Link>
+							<Link href="/users/list">Users</Link>
 						</Menu.Item>
-						<Menu.Item key="3" icon={<ImportOutlined />}>
-							{/* TO DO: remove login info */}
+						<Menu.Item key="3" icon={<ImportOutlined />} onClick={logout}>
 							<Link href="/login">Logout</Link>
 						</Menu.Item>
 					</Menu>

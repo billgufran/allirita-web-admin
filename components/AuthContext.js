@@ -1,5 +1,5 @@
 import { useRouter } from "next/router";
-import { createContext, useEffect, useState } from "react";
+import { createContext, useState } from "react";
 import api from "../services/api";
 
 //Custom hooks to set localStorage
@@ -30,32 +30,34 @@ function useLocalStorage(key, initialValue) {
 export const AuthContext = createContext();
 
 export default function AuthProvider(props) {
-	const [user, setUser] = useLocalStorage("user", true);
+
+	//	CHANGE THIS TO NULL BEFORE PROD
+	const [user, setUser] = useLocalStorage("user", null);
 
 	const router = useRouter();
 
 	//redirect if not logged in
-	useEffect(() => {
-		const handleRouteChange = url => {
-			if (url !== "/login" && !user) {
-				router.push("/login");
-			}
-		};
+	// useEffect(() => {
+	// 	const handleRouteChange = url => {
+	// 		if (url !== "/login" && url !== "/signup" && !user) {
+	// 			router.push("/login");
+	// 		}
+	// 	};
 
-		if (router.pathname !== "/login" && user === null) {
-			router.push("/login");
-		}
+	// 	if (router.pathname !== "/login" && router.pathname !== "/signup" && user === null) {
+	// 		router.push("/login");
+	// 	}
 
-		router.events.on("routeChangeStart", handleRouteChange);
-		return () => {
-			router.events.off("routeChangeStart", handleRouteChange);
-		};
-	}, [user]);
+	// 	router.events.on("routeChangeStart", handleRouteChange);
+	// 	return () => {
+	// 		router.events.off("routeChangeStart", handleRouteChange);
+	// 	};
+	// }, [user]);
 
 
 	const login = async (email, password) => {
 		const res = await api.post(
-			"https://projects.upanastudio.com/allirita-api/login",
+			"/login",
 			{
 				email,
 				password,
@@ -70,11 +72,23 @@ export default function AuthProvider(props) {
 		delete api.defaults.headers.Authorization;
 	};
 
+	const signUp = (name, email, password) => {
+		api.post(
+			"/register",
+			{
+				name,
+				email,
+				password,
+			}
+		);
+	}
+
 	const value = {
 		login,
 		logout,
 		isAuthenticated: !!user,
 		user,
+		signUp,
 	};
 
 	return (

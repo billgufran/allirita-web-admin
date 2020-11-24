@@ -1,5 +1,6 @@
 import { UploadOutlined } from "@ant-design/icons";
 import { Button, Card, Form, Input, Select, Upload } from "antd";
+// import axios from "axios";
 import { useCallback } from "react";
 import api from "../services/api";
 
@@ -7,10 +8,10 @@ const {Option} = Select;
 
 export default function ContentForm({id_konten, contentForm}) {
 
-	const updateContent = async (val, id) => {
+	const updateContent = async (value, id) => {
 		// PUT
 		try {
-			api.put(`/konten/${id}`,val)
+			api.put(`/konten/${id}`,value)
 		} catch (error) {
 			console.log(error)
 		}
@@ -19,9 +20,10 @@ export default function ContentForm({id_konten, contentForm}) {
 	const createContent = value => {
 		// POST
 		try {
-			api.post("/konten",val)
+			// axios.post("https://projects.upanastudio.com/allirita-api/konten", value)
+			api.post("/konten", value)
 		} catch (error) {
-			console.log(error)
+			console.log("createe")
 		}
 	}
 

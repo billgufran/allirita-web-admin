@@ -1,55 +1,59 @@
-import { LockOutlined, UserOutlined } from "@ant-design/icons";
 import { Button, Card, Form, Input, Layout } from "antd";
-import React from "react";
+import React, { useContext } from "react";
+import { AuthContext } from "../components/AuthContext";
 
-const {Content, Header} = Layout;
+const {Content} = Layout;
 
-export default function Login() {
+export default function SignUp() {
+
+	const {signUp} = useContext(AuthContext);
+
 	const onFinish = values => {
-		console.log("Received values of form: ", values);
+		const {name, email, password} = values
+		signUp(name, email, password)
 	};
 
 	return (
 		<Layout style={{minHeight: "100vh"}}>
-			<Header style={{
-				backgroundColor: "#F0F2F5",
-				display: "flex",
-				justifyContent: "center",
-				alignItems: "center",
-			}}>
-				<img src="/logo.png" alt="Allirita logo" width={300} />
-			</Header>
 			<Content
 				style={{
 					height: "100%",
 					display: "flex",
+					flexDirection: "column",
 					justifyContent: "center",
 					alignItems: "center",
 				}}
 			>
+				{/* <img src="/logo.png" alt="Allirita logo" width={300} /> */}
 				<Card style={{minWidth: 350}}>
 					<Form
-						name="normal_login"
+						name="signup"
 						initialValues={{
 							remember: true,
 						}}
 						onFinish={onFinish}
 					>
 						<Form.Item
-							name="username"
+							name="name"
 							rules={[
 								{
 									required: true,
-									message: "Please input your Username!",
+									message: "Please input your Name!",
 								},
 							]}
 						>
-							<Input
-								prefix={
-									<UserOutlined className="site-form-item-icon" />
-								}
-								placeholder="Username"
-							/>
+							<Input placeholder="Name" />
+						</Form.Item>
+						<Form.Item
+							name="email"
+							rules={[
+								{
+									required: true,
+									message: "Please input your Email!",
+								},
+							]}
+						>
+							<Input placeholder="Email" />
 						</Form.Item>
 						<Form.Item
 							name="password"
@@ -60,32 +64,16 @@ export default function Login() {
 								},
 							]}
 						>
-							<Input
-								prefix={
-									<LockOutlined className="site-form-item-icon" />
-								}
-								type="password"
-								placeholder="Password"
-							/>
+							<Input.Password placeholder="Password" />
 						</Form.Item>
-						{/* <Form.Item>
-					<Form.Item name="remember" valuePropName="checked" noStyle>
-						<Checkbox>Remember me</Checkbox>
-					</Form.Item>
-					<a className="login-form-forgot" href="">
-                  Forgot password
-               </a>
-				</Form.Item> */}
-
 						<Form.Item>
 							<Button
 								type="primary"
 								htmlType="submit"
-								style={{width: "100%"}}
+								style={{width: "100%", marginBottom: 7}}
 							>
-								Log in
+								Sign Up
 							</Button>
-							{/* Or <a href="">register now!</a> */}
 						</Form.Item>
 					</Form>
 				</Card>
