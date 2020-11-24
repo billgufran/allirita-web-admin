@@ -1,43 +1,76 @@
 import { Form, Input, Modal, Radio } from "antd";
-import React from "react";
+import { useContext } from "react";
+import api from "../services/api";
+import { AuthContext } from "./AuthContext";
 
-export default function QuizModal({ visible, setVisible, quizForm }) {
+export default function QuizModal({ visible, setVisible, quizForm, id, getSelectedContent }) {
+
+  const {user} = useContext(AuthContext)
+  const {id_konten, id_pertanyaan} = id
+
+  const updateQuiz = async value => {
+    try {
+      //API: PUT update pertanyaan/kuis
+      await api.put(
+        `/konten/${id_konten}/pertanyaan/${id_pertanyaan}`,
+        value,
+        {headers: {Authorization: `Bearer ${user.token}`}}
+      )
+    } catch (error) {
+      console.log(error)
+    }
+  }
+
+  const createQuiz = async value => {
+    try {
+      //API: POST create pertanyaan/kuis
+      await api.post(
+        `/konten/${id_konten}/pertanyaan`,
+        value,
+        {headers: {Authorization: `Bearer ${user.token}`}}
+      )
+    } catch (error) {
+      console.log(error)
+    }
+  }
 
   const onSubmit = value => {
+    id_pertanyaan ? updateQuiz(value) : createQuiz(value)
     setVisible(false);
-    console.log(value)
-  };
+    getSelectedContent(id_konten)
+  }
 
   const onCancel = () => {
     setVisible(false);
+    quizForm.resetFields();
   };
 
   return (
     <Modal
-      visible={ visible }
+      visible={visible}
       title="Edit question"
       okText="Save"
       cancelText="Cancel"
-      onCancel={ onCancel }
+      onCancel={onCancel}
       onOk={ () => {
         quizForm.submit();
-      } }
+      }}
     >
       <Form
-        form={ quizForm }
+        form={quizForm}
         layout="vertical"
         name="quiz-form"
-        onFinish={ onSubmit }
+        onFinish={onSubmit}
       >
-        <Form.Item label="Question" name="question">
+        <Form.Item label="Question" name="pertanyaan">
           <Input.TextArea placeholder="Type the question..." />
         </Form.Item>
-        <Form.Item label="Answer" name="correctAns">
+        <Form.Item label="Answer" name="jawaban_benar">
           <Radio.Group>
-            <Option value="firstOp" id={1} />
-            <Option value="secondOp" id={2} />
-            <Option value="thirdOp" id={3} />
-            <Option value="fourthOp" id={4} />
+            <Option value="jawaban_a" index={"a"} />
+            <Option value="jawaban_b" index={"b"} />
+            <Option value="jawaban_c" index={"c"} />
+            <Option value="jawaban_d" index={"d"} />
           </Radio.Group>
         </Form.Item>
       </Form>
@@ -45,14 +78,14 @@ export default function QuizModal({ visible, setVisible, quizForm }) {
   );
 }
 
-function Option({value, id}) {
+function Option({value, index}) {
   return (
     <Input.Group compact>
       <Form.Item>
-        <Radio value={id} />
+        <Radio value={index} />
       </Form.Item>
       <Form.Item name={value}>
-        <Input bordered={ false } placeholder="Type the answer..." />
+        <Input bordered={false} placeholder="Type the answer..." />
       </Form.Item>
     </Input.Group>
   )

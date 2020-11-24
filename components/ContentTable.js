@@ -1,11 +1,26 @@
 import { DeleteFilled, EditFilled } from "@ant-design/icons";
 import { Modal, Space, Table, Tag } from "antd";
 import Link from "next/link";
-import React, { useContext } from "react";
-import { ContentDataContext } from "./ContentDataContext";
+import { useContext } from "react";
+import api from "../services/api";
+import { AuthContext } from "./AuthContext";
 
-export default function ContentTable() {
-	const {contentForm, data, setData} = useContext(ContentDataContext);
+export default function ContentTable({content, getContent, isLoading}) {
+
+	const {user} = useContext(AuthContext)
+
+	const deleteData = async (id_konten) => {
+		try {
+			// API: delete konten/video
+			await api.delete(
+				`/konten/${id_konten}`,
+				{headers: {Authorization: `Bearer ${user.token}`}}
+			)
+			getContent()
+		} catch (error) {
+			console.log(error)
+		}
+	}
 
 	const columns = [
 		{
@@ -15,37 +30,56 @@ export default function ContentTable() {
 		},
 		{
 			title: "Title",
-			dataIndex: "title",
-			key: "title",
+			dataIndex: "judul",
+			key: "judul",
 		},
 		{
 			title: "Description",
-			dataIndex: "description",
-			key: "description",
+			dataIndex: "deskripsi",
+			key: "deskripsi",
 		},
+		// {
+		// 	title: "Category",
+		// 	dataIndex: "kategori",
+		// 	key: "kategori",
+		// 	render: tags => (
+		// 		<>
+		// 			{tags.map(tag => (
+		// 				<Tag key={tag}>
+		// 					{tag.toUpperCase()}
+		// 				</Tag>
+		// 			))}
+		// 		</>
+		// 	),
+		// },
 		{
 			title: "Category",
-			dataIndex: "category",
-			key: "category",
-			render: tags => (
-				<>
-					{tags.map(tag => (
-						<Tag key={tag}>
-							{tag.toUpperCase()}
-						</Tag>
-					))}
-				</>
-			),
+			dataIndex: "kategori",
+			key: "kategori",
+			render: categories => {
+				let arr = categories.split(",")
+				return (
+					<>
+						{
+							arr.map(category => (
+								<Tag key={category}>
+									{category.trim().toUpperCase()}
+								</Tag>
+							))
+						}
+					</>
+				)
+			}
 		},
 		{
 			title: "Action",
-			dataIndex: "id",
-			key: "id",
+			dataIndex: "id_konten",
+			key: "id_konten",
 			render: (text, record) => (
-				//text refer to data id
+				//"text" refer to data id
 				<Space size="middle">
 					<Link href={`/content/edit/${text}`}>
-						<EditFilled onClick={() => contentForm.setFieldsValue(record)} />
+						<EditFilled />
 					</Link>
 					<DeleteFilled
 						onClick={() =>
@@ -53,12 +87,8 @@ export default function ContentTable() {
 								title: "Delete content",
 								content: "Are you sure?",
 								centered: true,
-								// DELETE
 								onOk: () => {
-									let filteredData = data.filter(
-										content => content.id !== text
-									);
-									setData(filteredData.map((el, index) => ({...el, no: index + 1,})));
+									deleteData(text)
 								},
 							})
 						}
@@ -70,7 +100,7 @@ export default function ContentTable() {
 
 	return (
 		<>
-			<Table columns={columns} dataSource={data} />
+			<Table columns={columns} dataSource={content} loading={isLoading}/>
 		</>
 	);
 }

@@ -1,18 +1,16 @@
-import { LockOutlined, UserOutlined } from "@ant-design/icons";
 import { Button, Card, Form, Input, Layout } from "antd";
-import Link from "next/link";
 import React, { useContext } from "react";
 import { AuthContext } from "../components/AuthContext";
 
 const {Content} = Layout;
 
-export default function Login() {
+export default function SignUp() {
 
-	const {login, isLoading} = useContext(AuthContext);
+	const {signUp} = useContext(AuthContext);
 
 	const onFinish = values => {
-		const {email, password} = values
-		login(email, password)
+		const {name, email, password} = values
+		signUp(name, email, password)
 	};
 
 	return (
@@ -26,15 +24,26 @@ export default function Login() {
 					alignItems: "center",
 				}}
 			>
-				<img src="/logo.png" alt="Allirita logo" width={300} />
+				{/* <img src="/logo.png" alt="Allirita logo" width={300} /> */}
 				<Card style={{minWidth: 350}}>
 					<Form
-						name="login"
+						name="signup"
 						initialValues={{
 							remember: true,
 						}}
 						onFinish={onFinish}
 					>
+						<Form.Item
+							name="name"
+							rules={[
+								{
+									required: true,
+									message: "Please input your Name!",
+								},
+							]}
+						>
+							<Input placeholder="Name" />
+						</Form.Item>
 						<Form.Item
 							name="email"
 							rules={[
@@ -44,12 +53,7 @@ export default function Login() {
 								},
 							]}
 						>
-							<Input
-								prefix={
-									<UserOutlined className="site-form-item-icon" />
-								}
-								placeholder="Email"
-							/>
+							<Input placeholder="Email" />
 						</Form.Item>
 						<Form.Item
 							name="password"
@@ -60,24 +64,16 @@ export default function Login() {
 								},
 							]}
 						>
-							<Input.Password
-								prefix={
-									<LockOutlined className="site-form-item-icon" />
-								}
-								placeholder="Password"
-							/>
+							<Input.Password placeholder="Password" />
 						</Form.Item>
 						<Form.Item>
 							<Button
 								type="primary"
 								htmlType="submit"
 								style={{width: "100%", marginBottom: 7}}
-								loading={isLoading}
 							>
-								Log in
+								Sign Up
 							</Button>
-							Or&nbsp;
-							<Link href="/signup">Sign Up</Link>
 						</Form.Item>
 					</Form>
 				</Card>
