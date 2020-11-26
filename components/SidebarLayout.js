@@ -16,12 +16,20 @@ export default function Sidebar({children}) {
 
 	return (
 		<>
-			<Layout style={{minHeight: "100vh"}}>
-				<Sider width={200}>
+			<Layout>
+				<Sider width={200}
+					style={{
+						overflow: 'hide',
+						height: '100vh',
+						position: 'fixed',
+						left: 0,
+						backgroundColor: "#fff",
+						borderRight: "1px solid lightgrey",
+					}}
+				>
 					<Menu
 						defaultSelectedKeys={["1"]}
 						mode="inline"
-						style={{height: "100%", borderRight: "1px solid lightgrey"}}
 					>
 						<img
 							src="/logo.png"
@@ -40,11 +48,13 @@ export default function Sidebar({children}) {
 						</Menu.Item>
 					</Menu>
 				</Sider>
-				<Layout style={{padding: 24}}>
+				<Layout style={{marginLeft: 200}}>
 					<Content
 						style={{
-							margin: 0,
-							height: "100%",
+							// margin: 16,
+							padding: "24px 16px",
+							overflow: 'initial',
+							minHeight: "100vh",
 							display: "flex",
 							flexDirection: "column",
 							justifyContent: "space-between",
