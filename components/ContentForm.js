@@ -1,5 +1,5 @@
 import { ArrowLeftOutlined, UploadOutlined } from "@ant-design/icons";
-import { Button, Card, Form, Input, notification, Select, Skeleton, Switch, Upload } from "antd";
+import { Button, Card, Form, Input, message, notification, Select, Skeleton, Switch, Upload } from "antd";
 import Link from "next/link";
 import { useCallback, useContext, useState } from "react";
 import api from "../services/api";
@@ -45,7 +45,7 @@ export default function ContentForm({id_konten, contentForm, isLoading}) {
 	const createContent = async value => {
 		try {
 			// API: POST create konten/video
-			value["image"] = value.image.file.name
+			value["image"] = value.image.file.thumbUrl
 			await api.post(
 				"/konten",
 				value,
@@ -85,12 +85,13 @@ export default function ContentForm({id_konten, contentForm, isLoading}) {
 		name: "logo",
 		listType: "picture",
 		accept: ".jpeg,.jpg,.png,.gif,.svg,",
-		// beforeUpload: file => {
-		// 	if (file.type !== 'image/png') {
-		// 	message.error(`${file.name} format is not supported`);
-		// 	}
-		// 	return file.type === 'image/png';
-		// },
+		beforeUpload: file => {
+			const isFormatCorrect = file.type === 'image/jpeg' || file.type === 'image/jpg' || file.type === 'image/png' || file.type === 'image/gif' || file.type === 'image/svg';
+			if (!isFormatCorrect) {
+			message.error(`${file.name} format is not supported`);
+			}
+			return isFormatCorrect;
+		},
 		onChange: info => {
 			console.log(info.fileList);
 			// file.status is empty when beforeUpload return false
@@ -181,6 +182,12 @@ export default function ContentForm({id_konten, contentForm, isLoading}) {
 					<Form.Item
 						label="Upload thumbnail"
 						name="image"
+						rules={[
+							{
+								required: true,
+								message: "Please provide a thumbnail for the content",
+							},
+						]}
 					>
 						<Upload {...uploadProps}>
 							<Button icon={<UploadOutlined />}>Click to upload</Button>
@@ -190,8 +197,10 @@ export default function ContentForm({id_konten, contentForm, isLoading}) {
 						label="Disable quiz"
 						name="question_is_disabled"
 						valuePropName="checked"
+						// defaultV
+						initialValue={0}
 					>
-						<Switch/>
+						<Switch />
 					</Form.Item>
 				</Form>
 			</Skeleton>
