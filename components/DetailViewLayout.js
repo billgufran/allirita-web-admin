@@ -1,4 +1,4 @@
-import { Button, Card, Switch } from 'antd';
+import { Button, Card } from 'antd';
 import Form from 'antd/lib/form';
 import { useContext, useEffect, useState } from "react";
 import api from '../services/api';
@@ -62,7 +62,6 @@ export default function DetailViewLayout({id_konten}) {
 						bordered={ false }
 						style={{ width: "100%" }}
 						bodyStyle={{display: "flex", flexDirection: "column"}}
-						extra={<Switch defaultChecked onChange={toggleQuiz}/>}
 					>
                   {hasQuiz &&
 							<QuizTable
@@ -76,6 +75,7 @@ export default function DetailViewLayout({id_konten}) {
 							onClick={ () => contentForm.submit()}
 							type="primary"
 							style={{alignSelf: "flex-end", marginTop: 20}}
+							disabled={!contentForm.isFieldsTouched(true)}
 						>
 							Save
 						</Button>
