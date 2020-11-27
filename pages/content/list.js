@@ -24,7 +24,7 @@ export default function ContentList() {
 			const res = await api.get("/konten", {
 				headers: {Authorization: `Bearer ${user.token}`},
 			});
-			const data = res.data.data.getKonten.map((el, i) => ({
+			const data = res.data.data.konten.map((el, i) => ({
 				...el,
 				no: i + 1,
 			}));
