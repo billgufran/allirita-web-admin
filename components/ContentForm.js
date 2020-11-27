@@ -1,5 +1,5 @@
 import { ArrowLeftOutlined, UploadOutlined } from "@ant-design/icons";
-import { Button, Card, Form, Input, message, notification, Select, Skeleton, Switch, Upload } from "antd";
+import { Button, Card, Form, Input, notification, Select, Skeleton, Switch, Upload } from "antd";
 import Link from "next/link";
 import { useCallback, useContext, useState } from "react";
 import api from "../services/api";
@@ -45,7 +45,7 @@ export default function ContentForm({id_konten, contentForm, isLoading}) {
 	const createContent = async value => {
 		try {
 			// API: POST create konten/video
-			value["image"] = value.image.file.thumbUrl
+			value["image"] = value.image.fileList[0].thumbUrl
 			await api.post(
 				"/konten",
 				value,
@@ -85,18 +85,23 @@ export default function ContentForm({id_konten, contentForm, isLoading}) {
 		name: "logo",
 		listType: "picture",
 		accept: ".jpeg,.jpg,.png,.gif,.svg,",
-		beforeUpload: file => {
-			const isFormatCorrect = file.type === 'image/jpeg' || file.type === 'image/jpg' || file.type === 'image/png' || file.type === 'image/gif' || file.type === 'image/svg';
-			if (!isFormatCorrect) {
-			message.error(`${file.name} format is not supported`);
-			}
-			return isFormatCorrect;
-		},
 		onChange: info => {
-			console.log(info.fileList);
-			// file.status is empty when beforeUpload return false
-			// updateFileList(info.fileList.filter(file => !!file.status));
-		 },
+			console.log(info)
+		}
+		// beforeUpload: file => {
+		// 	const isFormatCorrect = file.type === 'image/jpeg' || file.type === 'image/jpg' || file.type === 'image/png' || file.type === 'image/gif' || file.type === 'image/svg';
+		// 	if (!isFormatCorrect) {
+		// 	message.error(`${file.name} format is not supported`);
+		// 	}
+		// 	return isFormatCorrect;
+		// },
+		// onChange: info => {
+		// 	console.log(info.fileList);
+		// 	// file.status is empty when beforeUpload return false
+		// 	updateFileList(info.fileList.filter(file => !!file.status));
+		// 	updateFileList(prevState => [prevState[prevState.length - 1]])
+		// 	console.log(fileList)
+		//  },
 	}
 
 	return (
