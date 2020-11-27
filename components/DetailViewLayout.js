@@ -1,85 +1,102 @@
-import { Button, Card } from 'antd';
-import Form from 'antd/lib/form';
+import { Button, Card } from "antd";
+import Form from "antd/lib/form";
 import { useContext, useEffect, useState } from "react";
-import api from '../services/api';
-import { AuthContext } from './AuthContext';
-import ContentForm from './ContentForm';
-import QuizTable from './QuizTable';
+import api from "../services/api";
+import { AuthContext } from "./AuthContext";
+import ContentForm from "./ContentForm";
+import QuizTable from "./QuizTable";
 import Sidebar from "./SidebarLayout";
 
 export default function DetailViewLayout({id_konten}) {
 
-   const [contentForm] = Form.useForm()
+	const [contentForm] = Form.useForm();
 
-   const [hasQuiz, setHasQuiz] = useState(true)
-	const [quizzes, setQuizzes ] = useState([])
+	const [quizzes, setQuizzes] = useState([]);
 	const [isLoading, setIsLoading] = useState(false);
+	const [defaultCategories, setDefaultCategories] = useState()
 
-	const {user} = useContext(AuthContext)
+	const {user} = useContext(AuthContext);
 
-   const getSelectedContent = async (id_konten) => {
+
+	// === API Call
+	const getSelectedContent = async id_konten => {
 		try {
 			setIsLoading(true);
 
 			// API: GET edit konten/video
-			const res = await api.get(
-				`/konten/${id_konten}`,
-				{headers: {Authorization: `Bearer ${user.token}`}}
-			)
+			const res = await api.get(`/konten/${id_konten}`, {
+				headers: {Authorization: `Bearer ${user.token}`},
+			});
 			// set value for content form
-			contentForm.setFieldsValue(res.data.data.getKonten)
+			const selectedCategories = res.data.data.getKonten.kategori.map(_category => _category.id_kategori)
+			setDefaultCategories(selectedCategories)
+			contentForm.setFieldsValue(res.data.data.getKonten);
 
 			// set data for quiz table
-			const quizData = res.data.data.pertanyaan.map((el, i) => ({...el, no: i + 1}))
-			setQuizzes(quizData)
+			const quizData = res.data.data.pertanyaan.map((el, i) => ({
+				...el,
+				no: i + 1,
+			}));
+			setQuizzes(quizData);
 		} catch (error) {
-			console.log(error)
+			console.log(error);
 		} finally {
 			setIsLoading(false);
 		}
-	}
+	};
 
+
+	// === Effect
 	useEffect(() => {
 		// id_konten only presents when editing data
-      if (id_konten) {
-			getSelectedContent(id_konten)
-      } else {
-         contentForm.resetFields()
-      }
-	}, [])
-
-	const toggleQuiz = () => {
-		setHasQuiz(prevState => !prevState);
-   };
+		if (id_konten) {
+			getSelectedContent(id_konten);
+		} else {
+			contentForm.resetFields();
+		}
+	}, []);
 
 	return (
 		<>
 			<Sidebar>
-				<Card bordered={false} style={{ width: "100%" }} bodyStyle={{ padding: 0 }}>
-					<ContentForm id_konten={id_konten} contentForm={contentForm} isLoading={isLoading} />
-					<Card
-						title="Quiz details"
-						bordered={ false }
-						style={{ width: "100%" }}
-						bodyStyle={{display: "flex", flexDirection: "column"}}
-					>
-                  {hasQuiz &&
+				<Card
+					bordered={false}
+					style={{width: "100%"}}
+					bodyStyle={{
+						padding: 0,
+						display: "flex",
+						flexDirection: "column",
+					}}
+				>
+					<ContentForm
+						id_konten={id_konten}
+						contentForm={contentForm}
+						isLoading={isLoading}
+						defaultCategories={defaultCategories}
+					/>
+					{!!id_konten && (
+						<Card
+							title="Quiz details"
+							bordered={false}
+							style={{width: "100%"}}
+						>
 							<QuizTable
 								quizzes={quizzes}
 								isLoading={isLoading}
 								getSelectedContent={getSelectedContent}
 								id_konten={id_konten}
 							/>
-						}
-						<Button
-							onClick={ () => contentForm.submit()}
-							type="primary"
-							style={{alignSelf: "flex-end", marginTop: 20}}
-							disabled={!contentForm.isFieldsTouched(true)}
-						>
-							Save
-						</Button>
-					</Card>
+						</Card>
+					)}
+
+					<Button
+						onClick={() => contentForm.submit()}
+						type="primary"
+						style={{alignSelf: "flex-end", margin: 24}}
+						// disabled={!contentForm.isFieldsTouched(true)}
+					>
+						Save
+					</Button>
 				</Card>
 			</Sidebar>
 		</>
