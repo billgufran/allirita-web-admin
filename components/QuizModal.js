@@ -64,7 +64,7 @@ export default function QuizModal({ visible, setVisible, quizForm, id, getSelect
         quizForm.submit();
       }}
       okButtonProps={{
-        disabled: !quizForm.isFieldsTouched(true),
+        // disabled: !quizForm.isFieldsTouched(true),
       }}
     >
       <Form
