@@ -1,6 +1,7 @@
 import Head from "next/head";
 import { useRouter } from 'next/router';
-import { useEffect } from "react";
+import { useContext, useEffect } from "react";
+import { AuthContext } from "../components/AuthContext";
 import styles from "../styles/Home.module.css";
 
 //path: /
@@ -8,8 +9,10 @@ import styles from "../styles/Home.module.css";
 export default function Home() {
 	const router = useRouter()
 
+	const {user} = useContext(AuthContext)
+
 	useEffect(() => {
-		router.push("/login")
+		user ? router.push("/content/list") : router.push("/login")
 	}, [])
 
 	return (
