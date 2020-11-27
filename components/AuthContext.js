@@ -1,3 +1,4 @@
+import { notification } from 'antd';
 import { useRouter } from "next/router";
 import { createContext, useEffect, useState } from "react";
 import api from "../services/api";
@@ -37,27 +38,31 @@ export default function AuthProvider(props) {
 
 	const router = useRouter();
 
-	useEffect(() => {
-		// redirect if not logged in
-		const handleRouteChange = url => {
-			if (url !== "/login" && url !== "/signup" && !user) {
-				router.push("/login");
-			}
-		};
-
-		if (
-			router.pathname !== "/login" &&
-			router.pathname !== "/signup" &&
-			user === null
-		) {
-			router.push("/login");
+	const checkToken = async () => {
+		try {
+			const res = await api.get("/akun", {
+				headers: {
+					Authorization: `Bearer ${user.token}`
+				}
+			})
+			console.log(res)
+		} catch (err) {
+			console.log("the token is expired")
+			// logout()
+			// openNotification()
 		}
+	}
 
-		router.events.on("routeChangeStart", handleRouteChange);
-		return () => {
-			router.events.off("routeChangeStart", handleRouteChange);
-		};
-	}, [user]);
+	const openNotification = () => {
+		notification["warning"]({
+		  message: 'Token Expired',
+		  description:
+			 'The token is expired. Please re-login.',
+		//   onClick: () => {
+		// 	 console.log('Notification Clicked!');
+		//   },
+		});
+	 };
 
 	const login = async (email, password) => {
 		try {
@@ -87,13 +92,49 @@ export default function AuthProvider(props) {
 		});
 	};
 
+
+	// === Effect
+
+	useEffect(() => {
+		// redirect if not logged in
+		const handleRouteChange = url => {
+			if (url !== "/login" && url !== "/signup" && !user) {
+				router.push("/login");
+			}
+		};
+
+		if (
+			router.pathname !== "/login" &&
+			router.pathname !== "/signup" &&
+			user === null
+		) {
+			router.push("/login");
+		}
+
+		router.events.on("routeChangeStart", handleRouteChange);
+		return () => {
+			router.events.off("routeChangeStart", handleRouteChange);
+		};
+	}, [user]);
+
+	// constatntly check token validity
+	// useEffect(() => {
+	// 	if (router.pathname !== "/login" && router.pathname !== "/signup") {
+	// 		console.log("inside")
+	// 		checkToken()
+	// 	}
+	// })
+
+
 	const value = {
 		login,
 		logout,
-		isAuthenticated: !!user,
+		// isAuthenticated: !!user,
 		user,
 		signUp,
 		isLoading,
+		checkToken,
+		openNotification,
 	};
 
 	return (
