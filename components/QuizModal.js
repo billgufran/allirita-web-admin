@@ -45,6 +45,14 @@ export default function QuizModal({ visible, setVisible, quizForm, id, getSelect
     quizForm.resetFields();
   };
 
+  // Form rules
+	const stringRules = {
+		required: true,
+		type: "string",
+		whitespace: true,
+		max: 255,
+	}
+
   return (
     <Modal
       visible={visible}
@@ -55,6 +63,9 @@ export default function QuizModal({ visible, setVisible, quizForm, id, getSelect
       onOk={ () => {
         quizForm.submit();
       }}
+      okButtonProps={{
+        disabled: !quizForm.isFieldsTouched(true),
+      }}
     >
       <Form
         form={quizForm}
@@ -62,10 +73,30 @@ export default function QuizModal({ visible, setVisible, quizForm, id, getSelect
         name="quiz-form"
         onFinish={onSubmit}
       >
-        <Form.Item label="Question" name="pertanyaan">
+        <Form.Item
+          label="Question"
+          name="pertanyaan"
+          rules={[
+            {
+              ...stringRules,
+              message: "Please fill the question",
+            },
+          ]}
+        >
           <Input.TextArea placeholder="Type the question..." />
         </Form.Item>
-        <Form.Item label="Answer" name="jawaban_benar">
+        <Form.Item
+          label="Answer"
+          name="jawaban_benar"
+          rules={[
+            {
+              required: true,
+              whitespace: true,
+              max: 255,
+              message: "Please provide the answers",
+            },
+          ]}
+        >
           <Radio.Group>
             <Option value="jawaban_a" index={"a"} />
             <Option value="jawaban_b" index={"b"} />
