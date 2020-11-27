@@ -45,8 +45,8 @@ export default function ContentTable({content, getContent, isLoading}) {
 			render: tags => (
 				<>
 					{tags.map(tag => (
-						<Tag key={tag}>
-							{tag.toUpperCase()}
+						<Tag key={tag.id + tag.id_konten + tag.id_kategori}>
+							{tag.nama_kategori.toUpperCase()}
 						</Tag>
 					))}
 				</>

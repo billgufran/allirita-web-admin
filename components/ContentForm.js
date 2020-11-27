@@ -1,18 +1,26 @@
 import { ArrowLeftOutlined, UploadOutlined } from "@ant-design/icons";
 import { Button, Card, Form, Input, notification, Select, Skeleton, Switch, Upload } from "antd";
 import Link from "next/link";
-import { useCallback, useContext, useState } from "react";
+import { useRouter } from "next/router";
+import { useCallback, useContext, useEffect, useState } from "react";
 import api from "../services/api";
 import { AuthContext } from "./AuthContext";
 
 const {Option} = Select;
 
-export default function ContentForm({id_konten, contentForm, isLoading}) {
+export default function ContentForm({id_konten, contentForm, isLoading, defaultCategories}) {
 
-	const [fileList, updateFileList] = useState([]);
+	// const [fileList, updateFileList] = useState([]);
+	const [categories, setCategories] = useState([])
+	const [pip, setPip] = useState(defaultCategories)
 
 	const {user} = useContext(AuthContext)
+	const router = useRouter();
 
+	// console.log(`Content form default categories is ${defaultCategories}`)
+	console.log(defaultCategories)
+
+	// === Notifcation instance
 	const successNotifcation = isCreating => {
 		notification["success"]({
 			message: 'Success',
@@ -27,18 +35,21 @@ export default function ContentForm({id_konten, contentForm, isLoading}) {
 		})
 	}
 
-
+	// === API Call
 	const updateContent = async (value, id_konten) => {
 		try {
 			// API: PUT update konten/video
-			await api.put(
+			const res = await api.put(
 				`/konten/${id_konten}`,
 				value,
 				{headers: {Authorization: `Bearer ${user.token}`}}
 			)
 			successNotifcation(false)
+			router.push("/content/list")
+			console.log(res)
 		} catch (error) {
 			console.log(error)
+			failedNotification()
 		}
 	};
 
@@ -46,20 +57,46 @@ export default function ContentForm({id_konten, contentForm, isLoading}) {
 		try {
 			// API: POST create konten/video
 			value["image"] = value.image.fileList[0].thumbUrl
-			await api.post(
+			const res = await api.post(
 				"/konten",
 				value,
 				{headers: {Authorization: `Bearer ${user.token}`}}
 			)
 			successNotifcation(true)
+			console.log(res)
+			// const id_konten = res.data.data.konten.id_konten;
+			// router.push(`/content/edit/${id_konten}`)
+
+		} catch (error) {
+			console.log(error)
+			failedNotification()
+		}
+		// console.log(value)
+	}
+
+	const getCategory = async () => {
+		try {
+			const res = await api.get(
+				"/kategori",
+				{headers: {Authorization: `Bearer ${user.token}`}}
+			)
+			setCategories(res.data.data.getKategori)
 		} catch (error) {
 			console.log(error)
 		}
-		console.log(value)
 	}
 
+	// === Effect
+
+	useEffect(() => {
+		getCategory()
+	},[])
+
+
+	// === Form submit handler
 	const onSubmit = useCallback(value => {
 		value["question_is_disabled"] = +value.question_is_disabled
+		console.log(value)
 		id_konten ? updateContent(value, id_konten) : createContent(value);
 	}, []);
 
@@ -104,8 +141,13 @@ export default function ContentForm({id_konten, contentForm, isLoading}) {
 		//  },
 	}
 
+	let val = defaultCategories ?? [1]
+
+
+
 	return (
 		<Card title={title} bordered={false} style={{width: "100%"}}>
+			<h1>{defaultCategories}</h1>
 			<Skeleton active loading={isLoading}>
 				<Form
 					wrapperCol={{span: 14}}
@@ -113,6 +155,8 @@ export default function ContentForm({id_konten, contentForm, isLoading}) {
 					layout="vertical"
 					name="content-form"
 					onFinish={onSubmit}
+					// initialValues={{"kategori.id_kategori": val }}
+					// {...apex}
 				>
 					<Form.Item
 						label="Title"
@@ -138,9 +182,10 @@ export default function ContentForm({id_konten, contentForm, isLoading}) {
 					>
 						<Input.TextArea />
 					</Form.Item>
-					{/* <Form.Item
+					<Form.Item
 						label="Category"
-						name="kategori"
+						name="kategori.id_kategori"
+						// initialValue={val}
 						rules={[
 							{
 								required: true,
@@ -151,15 +196,15 @@ export default function ContentForm({id_konten, contentForm, isLoading}) {
 					>
 						<Select
 							mode="multiple"
-							placeholder="Please fill content's category"
 						>
-							<Option value="action">Action</Option>
-							<Option value="chess">Chess</Option>
-							<Option value="drama">Drama</Option>
-							<Option value="war">War</Option>
+							{
+								categories.map(category => (
+									<Option value={category.id_kategori}>{category.nama_kategori}</Option>
+								))
+							}
 						</Select>
-					</Form.Item> */}
-					<Form.Item
+					</Form.Item>
+					{/* <Form.Item
 						label="Category"
 						name="kategori"
 						rules={[
@@ -171,7 +216,7 @@ export default function ContentForm({id_konten, contentForm, isLoading}) {
 						]}
 					>
 						<Input />
-					</Form.Item>
+					</Form.Item> */}
 					<Form.Item
 						label="Video URL"
 						name="video"
@@ -202,7 +247,6 @@ export default function ContentForm({id_konten, contentForm, isLoading}) {
 						label="Disable quiz"
 						name="question_is_disabled"
 						valuePropName="checked"
-						// defaultV
 						initialValue={0}
 					>
 						<Switch />
