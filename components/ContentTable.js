@@ -38,39 +38,39 @@ export default function ContentTable({content, getContent, isLoading}) {
 			dataIndex: "deskripsi",
 			key: "deskripsi",
 		},
-		// {
-		// 	title: "Category",
-		// 	dataIndex: "kategori",
-		// 	key: "kategori",
-		// 	render: tags => (
-		// 		<>
-		// 			{tags.map(tag => (
-		// 				<Tag key={tag}>
-		// 					{tag.toUpperCase()}
-		// 				</Tag>
-		// 			))}
-		// 		</>
-		// 	),
-		// },
 		{
 			title: "Category",
 			dataIndex: "kategori",
 			key: "kategori",
-			render: categories => {
-				let arr = categories.split(",")
-				return (
-					<>
-						{
-							arr.map(category => (
-								<Tag key={category}>
-									{category.trim().toUpperCase()}
-								</Tag>
-							))
-						}
-					</>
-				)
-			}
+			render: tags => (
+				<>
+					{tags.map(tag => (
+						<Tag key={tag}>
+							{tag.toUpperCase()}
+						</Tag>
+					))}
+				</>
+			),
 		},
+		// {
+		// 	title: "Category",
+		// 	dataIndex: "kategori",
+		// 	key: "kategori",
+		// 	render: categories => {
+		// 		let arr = categories.split(",")
+		// 		return (
+		// 			<>
+		// 				{
+		// 					arr.map(category => (
+		// 						<Tag key={category}>
+		// 							{category.trim().toUpperCase()}
+		// 						</Tag>
+		// 					))
+		// 				}
+		// 			</>
+		// 		)
+		// 	}
+		// },
 		{
 			title: "Action",
 			dataIndex: "id_konten",

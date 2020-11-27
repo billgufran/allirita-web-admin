@@ -1,7 +1,7 @@
 import { ArrowLeftOutlined, UploadOutlined } from "@ant-design/icons";
-import { Button, Card, Form, Input, Select, Skeleton, Upload } from "antd";
+import { Button, Card, Form, Input, notification, Select, Skeleton, Switch, Upload } from "antd";
 import Link from "next/link";
-import { useCallback, useContext } from "react";
+import { useCallback, useContext, useState } from "react";
 import api from "../services/api";
 import { AuthContext } from "./AuthContext";
 
@@ -9,35 +9,57 @@ const {Option} = Select;
 
 export default function ContentForm({id_konten, contentForm, isLoading}) {
 
+	const [fileList, updateFileList] = useState([]);
+
 	const {user} = useContext(AuthContext)
+
+	const successNotifcation = isCreating => {
+		notification["success"]({
+			message: 'Success',
+			description:
+			  `Content is successfully ${isCreating ? "created" : "updated"}`,
+		 });
+	}
+
+	const failedNotification = () => {
+		notification["error"]({
+			message: 'Failed',
+		})
+	}
+
 
 	const updateContent = async (value, id_konten) => {
 		try {
 			// API: PUT update konten/video
-			api.put(
+			await api.put(
 				`/konten/${id_konten}`,
 				value,
 				{headers: {Authorization: `Bearer ${user.token}`}}
 			)
+			successNotifcation(false)
 		} catch (error) {
 			console.log(error)
 		}
 	};
 
-	const createContent = value => {
+	const createContent = async value => {
 		try {
 			// API: POST create konten/video
-			api.post(
+			value["image"] = value.image.file.name
+			await api.post(
 				"/konten",
 				value,
 				{headers: {Authorization: `Bearer ${user.token}`}}
 			)
+			successNotifcation(true)
 		} catch (error) {
-			console.log("createe")
+			console.log(error)
 		}
+		console.log(value)
 	}
 
 	const onSubmit = useCallback(value => {
+		value["question_is_disabled"] = +value.question_is_disabled
 		id_konten ? updateContent(value, id_konten) : createContent(value);
 	}, []);
 
@@ -56,6 +78,24 @@ export default function ContentForm({id_konten, contentForm, isLoading}) {
 		type: "string",
 		whitespace: true,
 		max: 255,
+	}
+
+	const uploadProps = {
+		// fileList,
+		name: "logo",
+		listType: "picture",
+		accept: ".jpeg,.jpg,.png,.gif,.svg,",
+		// beforeUpload: file => {
+		// 	if (file.type !== 'image/png') {
+		// 	message.error(`${file.name} format is not supported`);
+		// 	}
+		// 	return file.type === 'image/png';
+		// },
+		onChange: info => {
+			console.log(info.fileList);
+			// file.status is empty when beforeUpload return false
+			// updateFileList(info.fileList.filter(file => !!file.status));
+		 },
 	}
 
 	return (
@@ -140,11 +180,18 @@ export default function ContentForm({id_konten, contentForm, isLoading}) {
 					</Form.Item>
 					<Form.Item
 						label="Upload thumbnail"
-						name="thumbnail"
+						name="image"
 					>
-						<Upload name="logo" action="/upload.do" listType="picture">
+						<Upload {...uploadProps}>
 							<Button icon={<UploadOutlined />}>Click to upload</Button>
 						</Upload>
+					</Form.Item>
+					<Form.Item
+						label="Disable quiz"
+						name="question_is_disabled"
+						valuePropName="checked"
+					>
+						<Switch/>
 					</Form.Item>
 				</Form>
 			</Skeleton>
