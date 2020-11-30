@@ -8,17 +8,13 @@ import { AuthContext } from "./AuthContext";
 
 const {Option} = Select;
 
-export default function ContentForm({id_konten, contentForm, isLoading, defaultCategories}) {
+export default function ContentForm({id_konten, contentForm, isLoading}) {
 
 	// const [fileList, updateFileList] = useState([]);
 	const [categories, setCategories] = useState([])
-	const [pip, setPip] = useState(defaultCategories)
 
 	const {user} = useContext(AuthContext)
 	const router = useRouter();
-
-	// console.log(`Content form default categories is ${defaultCategories}`)
-	console.log(defaultCategories)
 
 	// === Notifcation instance
 	const successNotifcation = isCreating => {
@@ -39,6 +35,7 @@ export default function ContentForm({id_konten, contentForm, isLoading, defaultC
 	const updateContent = async (value, id_konten) => {
 		try {
 			// API: PUT update konten/video
+			value["image"] = value.image.fileList[0].thumbUrl
 			const res = await api.put(
 				`/konten/${id_konten}`,
 				value,
@@ -64,14 +61,13 @@ export default function ContentForm({id_konten, contentForm, isLoading, defaultC
 			)
 			successNotifcation(true)
 			console.log(res)
-			// const id_konten = res.data.data.konten.id_konten;
-			// router.push(`/content/edit/${id_konten}`)
+			const id_konten = res.data.data.konten.id_konten;
+			router.push(`/content/edit/${id_konten}`)
 
 		} catch (error) {
 			console.log(error)
 			failedNotification()
 		}
-		// console.log(value)
 	}
 
 	const getCategory = async () => {
@@ -141,13 +137,9 @@ export default function ContentForm({id_konten, contentForm, isLoading, defaultC
 		//  },
 	}
 
-	let val = defaultCategories ?? [1]
-
-
 
 	return (
 		<Card title={title} bordered={false} style={{width: "100%"}}>
-			<h1>{defaultCategories}</h1>
 			<Skeleton active loading={isLoading}>
 				<Form
 					wrapperCol={{span: 14}}
@@ -155,8 +147,6 @@ export default function ContentForm({id_konten, contentForm, isLoading, defaultC
 					layout="vertical"
 					name="content-form"
 					onFinish={onSubmit}
-					// initialValues={{"kategori.id_kategori": val }}
-					// {...apex}
 				>
 					<Form.Item
 						label="Title"
@@ -184,8 +174,7 @@ export default function ContentForm({id_konten, contentForm, isLoading, defaultC
 					</Form.Item>
 					<Form.Item
 						label="Category"
-						name="kategori.id_kategori"
-						// initialValue={val}
+						name="kategori"
 						rules={[
 							{
 								required: true,
@@ -199,24 +188,11 @@ export default function ContentForm({id_konten, contentForm, isLoading, defaultC
 						>
 							{
 								categories.map(category => (
-									<Option value={category.id_kategori}>{category.nama_kategori}</Option>
+									<Option value={category.nama_kategori}>{category.nama_kategori}</Option>
 								))
 							}
 						</Select>
 					</Form.Item>
-					{/* <Form.Item
-						label="Category"
-						name="kategori"
-						rules={[
-							{
-								required: true,
-								message: "Please fill content's category",
-								type: "string",
-							},
-						]}
-					>
-						<Input />
-					</Form.Item> */}
 					<Form.Item
 						label="Video URL"
 						name="video"
