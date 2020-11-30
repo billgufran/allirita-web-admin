@@ -38,6 +38,7 @@ export default function DetailViewLayout({id_konten}) {
 				no: i + 1,
 			}));
 			setQuizzes(quizData);
+			setDisableQuiz(content.question_is_disabled)
 		} catch (error) {
 			console.log(error);
 		} finally {
