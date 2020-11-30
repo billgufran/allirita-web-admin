@@ -13,7 +13,7 @@ export default function DetailViewLayout({id_konten}) {
 
 	const [quizzes, setQuizzes] = useState([]);
 	const [isLoading, setIsLoading] = useState(false);
-	const [defaultCategories, setDefaultCategories] = useState()
+	const [disableQuiz, setDisableQuiz] = useState(false)
 
 	const {user} = useContext(AuthContext);
 
@@ -28,9 +28,9 @@ export default function DetailViewLayout({id_konten}) {
 				headers: {Authorization: `Bearer ${user.token}`},
 			});
 			// set value for content form
-			const selectedCategories = res.data.data.getKonten.kategori.map(_category => _category.id_kategori)
-			setDefaultCategories(selectedCategories)
-			contentForm.setFieldsValue(res.data.data.getKonten);
+			const content = res.data.data.getKonten
+			content["kategori"] = content.kategori.map(item => item.nama_kategori)
+			contentForm.setFieldsValue(content);
 
 			// set data for quiz table
 			const quizData = res.data.data.pertanyaan.map((el, i) => ({
@@ -72,9 +72,8 @@ export default function DetailViewLayout({id_konten}) {
 						id_konten={id_konten}
 						contentForm={contentForm}
 						isLoading={isLoading}
-						defaultCategories={defaultCategories}
 					/>
-					{!!id_konten && (
+					{(!!id_konten || disableQuiz) && (
 						<Card
 							title="Quiz details"
 							bordered={false}

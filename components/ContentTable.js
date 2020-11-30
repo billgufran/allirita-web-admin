@@ -52,25 +52,6 @@ export default function ContentTable({content, getContent, isLoading}) {
 				</>
 			),
 		},
-		// {
-		// 	title: "Category",
-		// 	dataIndex: "kategori",
-		// 	key: "kategori",
-		// 	render: categories => {
-		// 		let arr = categories.split(",")
-		// 		return (
-		// 			<>
-		// 				{
-		// 					arr.map(category => (
-		// 						<Tag key={category}>
-		// 							{category.trim().toUpperCase()}
-		// 						</Tag>
-		// 					))
-		// 				}
-		// 			</>
-		// 		)
-		// 	}
-		// },
 		{
 			title: "Action",
 			dataIndex: "id_konten",
