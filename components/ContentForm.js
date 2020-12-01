@@ -63,6 +63,7 @@ export default function ContentForm({id_konten, contentForm, isLoading}) {
 			});
 			successNotifcation(false);
 			router.push("/content/list");
+
 			console.log("PUT RESULT");
 			console.log(res);
 		} catch (error) {
@@ -78,6 +79,7 @@ export default function ContentForm({id_konten, contentForm, isLoading}) {
 				headers: {Authorization: `Bearer ${user.token}`},
 			});
 			successNotifcation(true);
+
 			console.log("POST RESULT");
 			console.log(res);
 			const id_konten = res.data.data.konten.id_konten;
@@ -106,7 +108,7 @@ export default function ContentForm({id_konten, contentForm, isLoading}) {
 
 	// === Form submit handler
 	const onSubmit = useCallback(async value => {
-		// const imageBase64 = btoa(value.image.file.originFileObj);
+
 		const imageBase64 = await getBase64(value.image.file.originFileObj);
 
 		value["question_is_disabled"] = +value.question_is_disabled;
@@ -146,6 +148,7 @@ export default function ContentForm({id_konten, contentForm, isLoading}) {
 			console.log("UPLOAD INFO");
 			console.log(info);
 			setFileList(info.fileList);
+			info.file["status"] = "done"
 		},
 		beforeUpload: file => {
 			const isFormatCorrect =
@@ -264,17 +267,7 @@ export default function ContentForm({id_konten, contentForm, isLoading}) {
 								},
 							]}
 						>
-							{/* <Upload {...uploadProps}>
-							{fileList.length < 1 && <Button icon={<UploadOutlined />}>Click to upload</Button>}
-						</Upload> */}
-
-							<Upload
-								// listType="picture-card"
-								// fileList={imageList}
-								// onPreview={handlePreview}
-								// onChange={handleChange}
-								{...uploadProps}
-							>
+							<Upload {...uploadProps}>
 								{fileList.length >= 1 ? null : uploadButton}
 							</Upload>
 						</Form.Item>
