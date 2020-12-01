@@ -62,10 +62,11 @@ export default function ContentForm({id_konten, contentForm, isLoading}) {
 				headers: {Authorization: `Bearer ${user.token}`},
 			});
 			successNotifcation(false);
-			router.push("/content/list");
 
 			console.log("PUT RESULT");
 			console.log(res);
+
+			router.push("/content/list");
 		} catch (error) {
 			console.log(error);
 			failedNotification();
@@ -82,6 +83,7 @@ export default function ContentForm({id_konten, contentForm, isLoading}) {
 
 			console.log("POST RESULT");
 			console.log(res);
+
 			const id_konten = res.data.data.konten.id_konten;
 			router.push(`/content/edit/${id_konten}`);
 		} catch (error) {
@@ -150,13 +152,12 @@ export default function ContentForm({id_konten, contentForm, isLoading}) {
 			setFileList(info.fileList);
 
 			if(info.file.status === "error") {
-				setFileList(prevState => [{
-					...prevState,
+				setFileList([{
+					...info.file,
 					percent : 100,
 					status  : "done",
 			  }]);
 			}
-			// info.file["status"] = "done"
 		},
 		beforeUpload: file => {
 			const isFormatCorrect =
