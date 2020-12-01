@@ -19,7 +19,6 @@ import { AuthContext } from "./AuthContext";
 const {Option} = Select;
 
 export default function ContentForm({id_konten, contentForm, isLoading}) {
-
 	const [categories, setCategories] = useState([]);
 	const [fileList, setFileList] = useState([]);
 
@@ -107,10 +106,13 @@ export default function ContentForm({id_konten, contentForm, isLoading}) {
 
 	// === Form submit handler
 	const onSubmit = useCallback(async value => {
+		// const imageBase64 = btoa(value.image.file.originFileObj);
 		const imageBase64 = await getBase64(value.image.file.originFileObj);
 
 		value["question_is_disabled"] = +value.question_is_disabled;
-		value["image"] = imageBase64;
+		value["image"] = imageBase64.substring(
+			imageBase64.indexOf(",", imageBase64.indexOf(";base64")) + 1
+		);
 
 		console.log("SUBMITTED VALUE");
 		console.log(value);
