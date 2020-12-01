@@ -19,7 +19,7 @@ import { AuthContext } from "./AuthContext";
 const {Option} = Select;
 
 export default function ContentForm({id_konten, contentForm, isLoading}) {
-	// const [fileList, updateFileList] = useState([]);
+
 	const [categories, setCategories] = useState([]);
 	const [fileList, setFileList] = useState([]);
 
@@ -38,20 +38,6 @@ export default function ContentForm({id_konten, contentForm, isLoading}) {
 			reader.onerror = error => reject(error);
 		});
 	}
-
-	//  const handleChange = info => {
-	// 	 if (info.file.status === 'done') {
-	// 		// Get this url from response in real world.
-	// 		getBase64(info.file.originFileObj, res => {
-	// 			// console.log(res)
-	// 			setImageUrl(res)
-	// 		}
-	// 		);
-	// 	 }
-	// 	// console.log("imageUrl VALUE")
-	// 	// console.log(imageUrl)
-	// 	setImageList(info.fileList)
-	//  };
 
 	// === Notifcation instance
 	const successNotifcation = isCreating => {
