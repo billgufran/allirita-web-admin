@@ -148,7 +148,15 @@ export default function ContentForm({id_konten, contentForm, isLoading}) {
 			console.log("UPLOAD INFO");
 			console.log(info);
 			setFileList(info.fileList);
-			info.file["status"] = "done"
+
+			if(info.file.status === "error") {
+				setFileList(prevState => [{
+					...prevState,
+					percent : 100,
+					status  : "done",
+			  }]);
+			}
+			// info.file["status"] = "done"
 		},
 		beforeUpload: file => {
 			const isFormatCorrect =
