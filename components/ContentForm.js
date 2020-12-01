@@ -1,5 +1,6 @@
 import { ArrowLeftOutlined, UploadOutlined } from "@ant-design/icons";
 import {
+	Button,
 	Card,
 	Form,
 	Input,
@@ -18,7 +19,14 @@ import { AuthContext } from "./AuthContext";
 
 const {Option} = Select;
 
-export default function ContentForm({id_konten, contentForm, isLoading}) {
+const imageBaseUrl = "https://allirita-api.upanastudio.com/storage";
+
+export default function ContentForm({
+	id_konten,
+	contentForm,
+	isLoading,
+	imageName,
+}) {
 	const [categories, setCategories] = useState([]);
 	const [fileList, setFileList] = useState([]);
 
@@ -108,9 +116,22 @@ export default function ContentForm({id_konten, contentForm, isLoading}) {
 		getCategory();
 	}, []);
 
+	useEffect(() => {
+		if (!!imageName) {
+			setFileList([
+				{
+					uid: "-1",
+					name: imageName,
+					status: "done",
+					url: `${imageBaseUrl}/${imageName}`,
+					thumbUrl: `${imageBaseUrl}/${imageName}`,
+				},
+			]);
+		}
+	}, [imageName]);
+
 	// === Form submit handler
 	const onSubmit = useCallback(async value => {
-
 		const imageBase64 = await getBase64(value.image.file.originFileObj);
 
 		value["question_is_disabled"] = +value.question_is_disabled;
@@ -120,6 +141,7 @@ export default function ContentForm({id_konten, contentForm, isLoading}) {
 
 		console.log("SUBMITTED VALUE");
 		console.log(value);
+
 		id_konten ? updateContent(value, id_konten) : createContent(value);
 	}, []);
 
@@ -151,12 +173,14 @@ export default function ContentForm({id_konten, contentForm, isLoading}) {
 			console.log(info);
 			setFileList(info.fileList);
 
-			if(info.file.status === "error") {
-				setFileList([{
-					...info.file,
-					percent : 100,
-					status  : "done",
-			  }]);
+			if (info.file.status === "error") {
+				setFileList([
+					{
+						...info.file,
+						percent: 100,
+						status: "done",
+					},
+				]);
 			}
 		},
 		beforeUpload: file => {
@@ -193,6 +217,12 @@ export default function ContentForm({id_konten, contentForm, isLoading}) {
 
 	return (
 		<>
+			<Button
+				onClick={() => console.log(contentForm.getFieldValue("image"))}
+			>
+				PIU
+			</Button>
+
 			<Modal
 				visible={previewVisible}
 				title={previewTitle}
