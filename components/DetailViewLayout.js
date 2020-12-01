@@ -7,12 +7,16 @@ import ContentForm from "./ContentForm";
 import QuizTable from "./QuizTable";
 import Sidebar from "./SidebarLayout";
 
+const imageBaseUrl = "https://allirita-api.upanastudio.com/storage";
+
 export default function DetailViewLayout({id_konten}) {
 	const [contentForm] = Form.useForm();
 
 	const [quizzes, setQuizzes] = useState([]);
 	const [isLoading, setIsLoading] = useState(false);
 	const [disableQuiz, setDisableQuiz] = useState(false);
+
+	const [imageName, setImageName] = useState("")
 
 	const {user} = useContext(AuthContext);
 
@@ -27,8 +31,15 @@ export default function DetailViewLayout({id_konten}) {
 			});
 			// set value for content form
 			const content = res.data.data.getKonten;
+
+			setImageName(content.image)
+
 			content["kategori"] = content.kategori.map(item => item.nama_kategori);
 			contentForm.setFieldsValue(content);
+
+
+			console.log("GET CONTENT RESPONSE")
+			console.log(content)
 
 			// set data for quiz table
 			const quizData = res.data.data.pertanyaan.map((el, i) => ({
@@ -69,6 +80,7 @@ export default function DetailViewLayout({id_konten}) {
 					id_konten={id_konten}
 					contentForm={contentForm}
 					isLoading={isLoading}
+					imageName={imageName}
 				/>
 				{(!!id_konten || disableQuiz) && (
 					<Card
@@ -89,7 +101,6 @@ export default function DetailViewLayout({id_konten}) {
 					onClick={() => contentForm.submit()}
 					type="primary"
 					style={{alignSelf: "flex-end", margin: 24}}
-					// disabled={!contentForm.isFieldsTouched(true)}
 				>
 					Save
 				</Button>
