@@ -7,7 +7,6 @@ import api from "../../services/api";
 //path: /users/list
 
 export default function UsersList() {
-
 	const [users, setUsers] = useState(null);
 	const [isLoading, setIsLoading] = useState(false);
 
@@ -38,13 +37,8 @@ export default function UsersList() {
 	}, []);
 
 	return (
-		<>
-			<Sidebar>
-				<UserTable
-					users={users}
-					isLoading={isLoading}
-				/>
-			</Sidebar>
-		</>
+		<Sidebar select="2">
+			<UserTable users={users} isLoading={isLoading} />
+		</Sidebar>
 	);
 }
