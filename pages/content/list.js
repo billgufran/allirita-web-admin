@@ -10,7 +10,6 @@ import api from "../../services/api";
 //path: /content/list
 
 export default function ContentList() {
-
 	const [content, setContent] = useState(null);
 	const [isLoading, setIsLoading] = useState(false);
 
@@ -41,7 +40,7 @@ export default function ContentList() {
 	}, []);
 
 	return (
-		<Sidebar>
+		<Sidebar select="1">
 			<ContentTable
 				content={content}
 				getContent={getContent}

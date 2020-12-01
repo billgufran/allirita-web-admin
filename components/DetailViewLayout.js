@@ -8,15 +8,13 @@ import QuizTable from "./QuizTable";
 import Sidebar from "./SidebarLayout";
 
 export default function DetailViewLayout({id_konten}) {
-
 	const [contentForm] = Form.useForm();
 
 	const [quizzes, setQuizzes] = useState([]);
 	const [isLoading, setIsLoading] = useState(false);
-	const [disableQuiz, setDisableQuiz] = useState(false)
+	const [disableQuiz, setDisableQuiz] = useState(false);
 
 	const {user} = useContext(AuthContext);
-
 
 	// === API Call
 	const getSelectedContent = async id_konten => {
@@ -28,8 +26,8 @@ export default function DetailViewLayout({id_konten}) {
 				headers: {Authorization: `Bearer ${user.token}`},
 			});
 			// set value for content form
-			const content = res.data.data.getKonten
-			content["kategori"] = content.kategori.map(item => item.nama_kategori)
+			const content = res.data.data.getKonten;
+			content["kategori"] = content.kategori.map(item => item.nama_kategori);
 			contentForm.setFieldsValue(content);
 
 			// set data for quiz table
@@ -38,14 +36,13 @@ export default function DetailViewLayout({id_konten}) {
 				no: i + 1,
 			}));
 			setQuizzes(quizData);
-			setDisableQuiz(content.question_is_disabled)
+			setDisableQuiz(content.question_is_disabled);
 		} catch (error) {
 			console.log(error);
 		} finally {
 			setIsLoading(false);
 		}
 	};
-
 
 	// === Effect
 	useEffect(() => {
@@ -58,47 +55,45 @@ export default function DetailViewLayout({id_konten}) {
 	}, []);
 
 	return (
-		<>
-			<Sidebar>
-				<Card
-					bordered={false}
-					style={{width: "100%"}}
-					bodyStyle={{
-						padding: 0,
-						display: "flex",
-						flexDirection: "column",
-					}}
-				>
-					<ContentForm
-						id_konten={id_konten}
-						contentForm={contentForm}
-						isLoading={isLoading}
-					/>
-					{(!!id_konten || disableQuiz) && (
-						<Card
-							title="Quiz details"
-							bordered={false}
-							style={{width: "100%"}}
-						>
-							<QuizTable
-								quizzes={quizzes}
-								isLoading={isLoading}
-								getSelectedContent={getSelectedContent}
-								id_konten={id_konten}
-							/>
-						</Card>
-					)}
-
-					<Button
-						onClick={() => contentForm.submit()}
-						type="primary"
-						style={{alignSelf: "flex-end", margin: 24}}
-						// disabled={!contentForm.isFieldsTouched(true)}
+		<Sidebar select="1">
+			<Card
+				bordered={false}
+				style={{width: "100%"}}
+				bodyStyle={{
+					padding: 0,
+					display: "flex",
+					flexDirection: "column",
+				}}
+			>
+				<ContentForm
+					id_konten={id_konten}
+					contentForm={contentForm}
+					isLoading={isLoading}
+				/>
+				{(!!id_konten || disableQuiz) && (
+					<Card
+						title="Quiz details"
+						bordered={false}
+						style={{width: "100%"}}
 					>
-						Save
-					</Button>
-				</Card>
-			</Sidebar>
-		</>
+						<QuizTable
+							quizzes={quizzes}
+							isLoading={isLoading}
+							getSelectedContent={getSelectedContent}
+							id_konten={id_konten}
+						/>
+					</Card>
+				)}
+
+				<Button
+					onClick={() => contentForm.submit()}
+					type="primary"
+					style={{alignSelf: "flex-end", margin: 24}}
+					// disabled={!contentForm.isFieldsTouched(true)}
+				>
+					Save
+				</Button>
+			</Card>
+		</Sidebar>
 	);
 }
