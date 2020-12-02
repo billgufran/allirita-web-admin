@@ -39,17 +39,18 @@ export default function AuthProvider(props) {
 	const router = useRouter();
 
 	const checkToken = async () => {
+		console.log("checking token...")
 		try {
 			const res = await api.get("/akun", {
 				headers: {
 					Authorization: `Bearer ${user.token}`
 				}
 			})
-			console.log(res)
+			console.log("the token still valid")
 		} catch (err) {
 			console.log("the token is expired")
-			// logout()
-			// openNotification()
+			logout()
+			openNotification()
 		}
 	}
 
@@ -58,9 +59,6 @@ export default function AuthProvider(props) {
 		  message: 'Token Expired',
 		  description:
 			 'The token is expired. Please re-login.',
-		//   onClick: () => {
-		// 	 console.log('Notification Clicked!');
-		//   },
 		});
 	 };
 
@@ -95,8 +93,8 @@ export default function AuthProvider(props) {
 
 	// === Effect
 
+	// redirect if not logged in
 	useEffect(() => {
-		// redirect if not logged in
 		const handleRouteChange = url => {
 			if (url !== "/login" && url !== "/signup" && !user) {
 				router.push("/login");
@@ -118,12 +116,12 @@ export default function AuthProvider(props) {
 	}, [user]);
 
 	// constatntly check token validity
-	// useEffect(() => {
-	// 	if (router.pathname !== "/login" && router.pathname !== "/signup") {
-	// 		console.log("inside")
-	// 		checkToken()
-	// 	}
-	// })
+	useEffect(() => {
+		if (router.pathname !== "/login" && router.pathname !== "/signup") {
+			console.log("Initialize token check")
+			checkToken()
+		}
+	},[router.pathname])
 
 
 	const value = {

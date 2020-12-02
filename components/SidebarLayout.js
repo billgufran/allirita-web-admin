@@ -3,7 +3,7 @@ import {
 	ImportOutlined,
 	TeamOutlined
 } from "@ant-design/icons";
-import { Layout, Menu } from "antd";
+import { Button, Layout, Menu } from "antd";
 import Link from "next/link";
 import { useContext } from "react";
 import { AuthContext } from "./AuthContext";
@@ -11,7 +11,8 @@ import { AuthContext } from "./AuthContext";
 const {Content, Sider} = Layout;
 
 export default function Sidebar({children, select}) {
-	const {logout} = useContext(AuthContext);
+
+	const {logout, checkToken} = useContext(AuthContext);
 
 	return (
 		<Layout>
@@ -27,6 +28,9 @@ export default function Sidebar({children, select}) {
 				}}
 			>
 				<Menu defaultSelectedKeys={[select]} mode="inline">
+
+				{process.env.NODE_ENV === "development" && <Button onClick={checkToken}>Check Token</Button>}
+
 					<img
 						src="/logo.png"
 						alt="Allirita logo"

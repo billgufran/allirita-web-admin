@@ -1,6 +1,5 @@
 import { ArrowLeftOutlined, UploadOutlined } from "@ant-design/icons";
 import {
-	Button,
 	Card,
 	Form,
 	Input,
@@ -217,12 +216,6 @@ export default function ContentForm({
 
 	return (
 		<>
-			<Button
-				onClick={() => console.log(contentForm.getFieldValue("image"))}
-			>
-				PIU
-			</Button>
-
 			<Modal
 				visible={previewVisible}
 				title={previewTitle}
