@@ -38,22 +38,6 @@ export default function AuthProvider(props) {
 
 	const router = useRouter();
 
-	const checkToken = async () => {
-		console.log("checking token...")
-		try {
-			const res = await api.get("/akun", {
-				headers: {
-					Authorization: `Bearer ${user.token}`
-				}
-			})
-			console.log("the token still valid")
-		} catch (err) {
-			console.log("the token is expired")
-			logout()
-			openNotification()
-		}
-	}
-
 	const openNotification = () => {
 		notification["warning"]({
 		  message: 'Session Expired',
@@ -90,9 +74,25 @@ export default function AuthProvider(props) {
 		});
 	};
 
+	const checkToken = async () => {
+		console.log("checking token...")
+		try {
+			const res = await api.get("/akun", {
+				headers: {
+					Authorization: `Bearer ${user.token}`
+				}
+			})
+			setUser(prevState => ({...prevState, id_role: res.data.data.user.id_role}))
+			console.log("the token still valid")
+		} catch (err) {
+			console.log("the token is expired")
+			logout()
+			openNotification()
+		}
+	}
+
 
 	// === Effect
-
 	// redirect if not logged in
 	useEffect(() => {
 		const handleRouteChange = url => {
@@ -127,7 +127,6 @@ export default function AuthProvider(props) {
 	const value = {
 		login,
 		logout,
-		// isAuthenticated: !!user,
 		user,
 		signUp,
 		isLoading,
