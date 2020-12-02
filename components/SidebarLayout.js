@@ -11,8 +11,7 @@ import { AuthContext } from "./AuthContext";
 const {Content, Sider} = Layout;
 
 export default function Sidebar({children, select}) {
-
-	const {logout, checkToken} = useContext(AuthContext);
+	const {logout, checkToken, user} = useContext(AuthContext);
 
 	return (
 		<Layout>
@@ -29,7 +28,9 @@ export default function Sidebar({children, select}) {
 			>
 				<Menu defaultSelectedKeys={[select]} mode="inline">
 
-				{process.env.NODE_ENV === "development" && <Button onClick={checkToken}>Check Token</Button>}
+					{process.env.NODE_ENV === "development" && (
+						<Button onClick={checkToken}>Check Token</Button>
+					)}
 
 					<img
 						src="/logo.png"
@@ -40,9 +41,11 @@ export default function Sidebar({children, select}) {
 					<Menu.Item key="1" icon={<AppstoreOutlined />}>
 						<Link href="/content/list">Content</Link>
 					</Menu.Item>
-					<Menu.Item key="2" icon={<TeamOutlined />}>
-						<Link href="/users/list">Users</Link>
-					</Menu.Item>
+					{user?.id_role === 1 && (
+						<Menu.Item key="2" icon={<TeamOutlined />}>
+							<Link href="/users/list">Users</Link>
+						</Menu.Item>
+					)}
 					<Menu.Item key="3" icon={<ImportOutlined />} onClick={logout}>
 						<Link href="/login">Logout</Link>
 					</Menu.Item>
