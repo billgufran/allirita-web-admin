@@ -25,6 +25,7 @@ export default function ContentForm({
 	contentForm,
 	isLoading,
 	imageName,
+	setDisableQuiz,
 }) {
 	const [categories, setCategories] = useState([]);
 	const [fileList, setFileList] = useState([]);
@@ -159,6 +160,11 @@ export default function ContentForm({
 		</>
 	);
 
+	// === Switch change event handler
+	const onSwitchChange = val => {
+		setDisableQuiz(val);
+	}
+
 	// === Form rules
 	const stringRules = {
 		required: true,
@@ -219,6 +225,7 @@ export default function ContentForm({
 			<div style={{marginTop: 8}}>Upload</div>
 		</div>
 	);
+
 
 	return (
 		<>
@@ -315,7 +322,7 @@ export default function ContentForm({
 							valuePropName="checked"
 							initialValue={0}
 						>
-							<Switch />
+							<Switch onChange={onSwitchChange} />
 						</Form.Item>
 					</Form>
 				</Skeleton>

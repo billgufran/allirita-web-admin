@@ -80,8 +80,9 @@ export default function DetailViewLayout({id_konten}) {
 					contentForm={contentForm}
 					isLoading={isLoading}
 					imageName={imageName}
+					setDisableQuiz={setDisableQuiz}
 				/>
-				{(!!id_konten || disableQuiz) && (
+				{(!!id_konten && !disableQuiz) && (
 					<Card
 						title="Quiz details"
 						bordered={false}
