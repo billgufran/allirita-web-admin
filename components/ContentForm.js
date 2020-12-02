@@ -29,6 +29,8 @@ export default function ContentForm({
 	const [categories, setCategories] = useState([]);
 	const [fileList, setFileList] = useState([]);
 
+	const [thumbnailRequired, setThumbnailRequired] = useState(true)
+
 	const [previewVisible, setPreviewVisible] = useState(false);
 	const [previewImage, setPreviewImage] = useState("");
 	const [previewTitle, setPreviewTitle] = useState("");
@@ -126,17 +128,21 @@ export default function ContentForm({
 					thumbUrl: `${imageBaseUrl}/${imageName}`,
 				},
 			]);
+			setThumbnailRequired(false)
 		}
 	}, [imageName]);
 
 	// === Form submit handler
 	const onSubmit = useCallback(async value => {
-		const imageBase64 = await getBase64(value.image.file.originFileObj);
 
 		value["question_is_disabled"] = +value.question_is_disabled;
-		value["image"] = imageBase64.substring(
-			imageBase64.indexOf(",", imageBase64.indexOf(";base64")) + 1
-		);
+
+		if(value.image) {
+			const imageBase64 = await getBase64(value.image.file.originFileObj);
+			value["image"] = imageBase64.substring(
+				imageBase64.indexOf(",", imageBase64.indexOf(";base64")) + 1
+			);
+		}
 
 		console.log("SUBMITTED VALUE");
 		console.log(value);
@@ -293,7 +299,7 @@ export default function ContentForm({
 							name="image"
 							rules={[
 								{
-									required: true,
+									required: thumbnailRequired,
 									message:
 										"Please provide a thumbnail for the content",
 								},
