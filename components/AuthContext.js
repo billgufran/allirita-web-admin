@@ -56,9 +56,9 @@ export default function AuthProvider(props) {
 
 	const openNotification = () => {
 		notification["warning"]({
-		  message: 'Token Expired',
+		  message: 'Session Expired',
 		  description:
-			 'The token is expired. Please re-login.',
+			 'Your session has expired. Please re-login.',
 		});
 	 };
 
