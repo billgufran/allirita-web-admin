@@ -7,8 +7,6 @@ import ContentForm from "./ContentForm";
 import QuizTable from "./QuizTable";
 import Sidebar from "./SidebarLayout";
 
-const imageBaseUrl = "https://allirita-api.upanastudio.com/storage";
-
 export default function DetailViewLayout({id_konten}) {
 	const [contentForm] = Form.useForm();
 
@@ -35,6 +33,7 @@ export default function DetailViewLayout({id_konten}) {
 			setImageName(content.image)
 
 			content["kategori"] = content.kategori.map(item => item.nama_kategori);
+			content["image"] = null
 			contentForm.setFieldsValue(content);
 
 
