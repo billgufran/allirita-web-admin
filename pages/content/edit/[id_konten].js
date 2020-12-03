@@ -5,9 +5,10 @@ import DetailViewLayout from '../../../components/DetailViewLayout';
 
 export default function Edit() {
 
-	//get the data id from query
+	//get the id from query
 	const router = useRouter();
 	const {id_konten} = router.query;
+	console.log(router)
 
 	return <DetailViewLayout id_konten={id_konten} />
 }
