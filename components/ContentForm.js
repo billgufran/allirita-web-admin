@@ -165,7 +165,11 @@ export default function ContentForm({
 		setDisableQuiz(val);
 	}
 
-	// === Form rules
+	// === Form rules and validation
+	const onFinishFailed = errorInfo => {
+		console.log('Failed:', errorInfo);
+	 };
+
 	const stringRules = {
 		required: true,
 		type: "string",
@@ -278,6 +282,7 @@ export default function ContentForm({
 						layout="vertical"
 						name="content-form"
 						onFinish={onSubmit}
+						onFinishFailed={onFinishFailed}
 						validateMessages={defaultValidateMessages}
 					>
 						<Form.Item
@@ -286,7 +291,6 @@ export default function ContentForm({
 							rules={[
 								{
 									...stringRules,
-									message: "Please fill content's title",
 								},
 							]}
 						>
@@ -298,11 +302,10 @@ export default function ContentForm({
 							rules={[
 								{
 									...stringRules,
-									// message: "Please fill content's description",
 								},
 							]}
 						>
-							<Input.TextArea />
+							<Input.TextArea autoSize={{minRows: 3, maxRows: 6}} showCount maxLength={255}/>
 						</Form.Item>
 						<Form.Item
 							label="Category"
@@ -310,7 +313,6 @@ export default function ContentForm({
 							rules={[
 								{
 									required: true,
-									message: "Please fill content's category",
 									type: "array",
 								},
 							]}
@@ -329,9 +331,9 @@ export default function ContentForm({
 							rules={[
 								{
 									...stringRules,
-									message: "Please fill content's URL",
 								},
 							]}
+							extra={<p>Example: https://www.youtube.com/watch?v=<b>Ok5v511qbko</b>. The bold text is the ID</p>}
 						>
 							<Input />
 						</Form.Item>
