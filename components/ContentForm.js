@@ -78,15 +78,18 @@ export default function ContentForm({
 				headers: {Authorization: `Bearer ${user.token}`},
 			});
 			const id_konten = res.data.data.konten.id_konten;
-			router.prefetch(`/content/edit/${id_konten}`)
+			router.prefetch(`/content/edit/${id_konten}`);
 
 			successNotifcation(true);
 
 			console.log("POST RESULT");
 			console.log(res);
 
-			router.push(`/content/edit/${id_konten}`, undefined, { shallow: true });
-
+			if (!value.question_is_disabled) {// question_is_disabled = 0 (the question is enabled)
+				router.push(`/content/edit/${id_konten}`);
+			} else {
+				router.push("/content/list");
+			}
 			// carouselRef.current.next();
 		} catch (error) {
 			console.log(error);
@@ -108,7 +111,11 @@ export default function ContentForm({
 			console.log("PUT RESULT");
 			console.log(res);
 
-			// carouselRef.current.next();
+			if (!value.question_is_disabled) {// question_is_disabled = 0 (the question is enabled)
+				carouselRef.current.next();
+			} else {
+				router.push("/content/list");
+			}
 		} catch (error) {
 			console.log(error);
 			failedNotification();
