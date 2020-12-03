@@ -80,7 +80,7 @@ export default function DetailViewLayout({id_konten}) {
 
 	return (
 		<Sidebar select="1">
-			<Carousel ref={carouselRef}>
+			<Carousel dots={false} ref={carouselRef}>
 				{/* Content Card */}
 				<ContentForm
 					id_konten={id_konten}
