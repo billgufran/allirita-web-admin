@@ -92,7 +92,16 @@ export default function DetailViewLayout({id_konten}) {
 				/>
 
 				{/* Quiz Card */}
-				<Card title={cardHeader} bordered={false} style={{width: "100%"}}>
+				<Card
+					title={cardHeader}
+					bordered={false}
+					style={{width: "100%"}}
+					bodyStyle={{
+						padding: 0,
+						display: "flex",
+						flexDirection: "column",
+					}}
+				>
 					<QuizTable
 						quizzes={quizzes}
 						isLoading={isLoading}

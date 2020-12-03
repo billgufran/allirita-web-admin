@@ -103,8 +103,8 @@ export default function QuizTable({quizzes, isLoading, id_konten, getSelectedCon
 				getSelectedContent={getSelectedContent}
 				id={id}
 			/>
-			<Link href="/content/list">
-				<Button>Save</Button>
+			<Link href="/content/list" >
+				<Button style={{alignSelf: "flex-end", margin: 22}}>Save</Button>
 			</Link>
 		</>
 	);
