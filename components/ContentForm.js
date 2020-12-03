@@ -175,7 +175,6 @@ export default function ContentForm({
 	// === Switch change event handler
 	const onSwitchChange = val => {
 		setDisableQuiz(val);
-		setFormLoading(val);
 	};
 
 	// === Form rules and validation
