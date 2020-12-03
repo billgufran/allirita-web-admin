@@ -1,4 +1,4 @@
-import { notification } from 'antd';
+import { notification } from "antd";
 import { useRouter } from "next/router";
 import { createContext, useEffect, useState } from "react";
 import api from "../services/api";
@@ -31,20 +31,29 @@ function useLocalStorage(key, initialValue) {
 export const AuthContext = createContext();
 
 export default function AuthProvider(props) {
-
 	//	CHANGE THIS TO NULL BEFORE PROD
 	const [user, setUser] = useLocalStorage("user", null);
 	const [isLoading, setIsLoading] = useState(false);
 
 	const router = useRouter();
 
-	const openNotification = () => {
+	// === notifications instance
+	const sessionExpiredNotification = () => {
 		notification["warning"]({
-		  message: 'Session Expired',
-		  description:
-			 'Your session has expired. Please re-login.',
+			message: "Session Expired",
+			description: "Your session has expired. Please re-login.",
 		});
-	 };
+	};
+
+	const loginFailedNotification = () => {
+		notification["warning"]({
+			message: "Login failed",
+			description: "Your email/password is incorrect.",
+		});
+	};
+
+
+
 
 	const login = async (email, password) => {
 		try {
@@ -53,8 +62,12 @@ export default function AuthProvider(props) {
 				email,
 				password,
 			});
-			setUser({email, token: res.data.data.token});
-			router.push("/content/list");
+			if(res.data.isError) {
+				loginFailedNotification()
+			} else {
+				setUser({email, token: res.data.data.token});
+				router.push("/content/list");
+			}
 		} catch (err) {
 			console.log(err);
 		} finally {
@@ -75,22 +88,24 @@ export default function AuthProvider(props) {
 	};
 
 	const checkToken = async () => {
-		console.log("checking token...")
+		console.log("checking token...");
 		try {
 			const res = await api.get("/akun", {
 				headers: {
-					Authorization: `Bearer ${user.token}`
-				}
-			})
-			setUser(prevState => ({...prevState, id_role: res.data.data.user.id_role}))
-			console.log("the token still valid")
+					Authorization: `Bearer ${user.token}`,
+				},
+			});
+			setUser(prevState => ({
+				...prevState,
+				id_role: res.data.data.user.id_role,
+			}));
+			console.log("the token still valid");
 		} catch (err) {
-			console.log("the token is expired")
-			logout()
-			openNotification()
+			console.log("the token is expired");
+			logout();
+			sessionExpiredNotification();
 		}
-	}
-
+	};
 
 	// === Effect
 	// redirect if not logged in
@@ -118,20 +133,18 @@ export default function AuthProvider(props) {
 	// constatntly check token validity
 	useEffect(() => {
 		if (router.pathname !== "/login" && router.pathname !== "/signup") {
-			console.log("Initialize token check")
-			checkToken()
+			console.log("Initialize token check");
+			checkToken();
 		}
-	},[router.pathname])
-
+	}, [router.pathname]);
 
 	const value = {
 		login,
 		logout,
-		user,
 		signUp,
-		isLoading,
 		checkToken,
-		openNotification,
+		isLoading,
+		user,
 	};
 
 	return (
