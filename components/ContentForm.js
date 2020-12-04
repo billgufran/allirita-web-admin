@@ -1,5 +1,6 @@
 import { ArrowLeftOutlined, UploadOutlined } from "@ant-design/icons";
 import {
+	Button,
 	Card,
 	Form,
 	Input,
@@ -26,12 +27,16 @@ export default function ContentForm({
 	isLoading,
 	imageName,
 	setDisableQuiz,
+	carouselRef,
 }) {
 	const [categories, setCategories] = useState([]);
 	const [fileList, setFileList] = useState([]);
+	const [formLoading, setFormLoading] = useState(false);
 
-	const [thumbnailRequired, setThumbnailRequired] = useState(true)
+	// Thumbnail is not required on content update
+	const [thumbnailRequired, setThumbnailRequired] = useState(true);
 
+	// Image preview modal states
 	const [previewVisible, setPreviewVisible] = useState(false);
 	const [previewImage, setPreviewImage] = useState("");
 	const [previewTitle, setPreviewTitle] = useState("");
@@ -65,7 +70,37 @@ export default function ContentForm({
 	};
 
 	// === API Call
+	const createContent = async value => {
+		setFormLoading(true);
+		try {
+			// API: POST create konten/video
+			const res = await api.post("/konten", value, {
+				headers: {Authorization: `Bearer ${user.token}`},
+			});
+			const id_konten = res.data.data.konten.id_konten;
+			router.prefetch(`/content/edit/${id_konten}`);
+
+			successNotifcation(true);
+
+			console.log("POST RESULT");
+			console.log(res);
+
+			if (!value.question_is_disabled) {// question_is_disabled = 0 (the question is enabled)
+				router.push(`/content/edit/${id_konten}`);
+			} else {
+				router.push("/content/list");
+			}
+			// carouselRef.current.next();
+		} catch (error) {
+			console.log(error);
+			failedNotification();
+		} finally {
+			setFormLoading(false);
+		}
+	};
+
 	const updateContent = async (value, id_konten) => {
+		setFormLoading(true);
 		try {
 			// API: PUT update konten/video
 			const res = await api.put(`/konten/${id_konten}`, value, {
@@ -76,29 +111,16 @@ export default function ContentForm({
 			console.log("PUT RESULT");
 			console.log(res);
 
-			router.push("/content/list");
+			if (!value.question_is_disabled) {// question_is_disabled = 0 (the question is enabled)
+				carouselRef.current.next();
+			} else {
+				router.push("/content/list");
+			}
 		} catch (error) {
 			console.log(error);
 			failedNotification();
-		}
-	};
-
-	const createContent = async value => {
-		try {
-			// API: POST create konten/video
-			const res = await api.post("/konten", value, {
-				headers: {Authorization: `Bearer ${user.token}`},
-			});
-			successNotifcation(true);
-
-			console.log("POST RESULT");
-			console.log(res);
-
-			const id_konten = res.data.data.konten.id_konten;
-			router.push(`/content/edit/${id_konten}`);
-		} catch (error) {
-			console.log(error);
-			failedNotification();
+		} finally {
+			setFormLoading(false);
 		}
 	};
 
@@ -129,16 +151,15 @@ export default function ContentForm({
 					thumbUrl: `${imageBaseUrl}/${imageName}`,
 				},
 			]);
-			setThumbnailRequired(false)
+			setThumbnailRequired(false);
 		}
 	}, [imageName]);
 
 	// === Form submit handler
 	const onSubmit = useCallback(async value => {
-
 		value["question_is_disabled"] = +value.question_is_disabled;
 
-		if(value.image) {
+		if (value.image) {
 			const imageBase64 = await getBase64(value.image.file.originFileObj);
 			value["image"] = imageBase64.substring(
 				imageBase64.indexOf(",", imageBase64.indexOf(";base64")) + 1
@@ -151,24 +172,15 @@ export default function ContentForm({
 		id_konten ? updateContent(value, id_konten) : createContent(value);
 	}, []);
 
-	const title = (
-		<>
-			<Link href="/content/list">
-				<ArrowLeftOutlined style={{marginRight: 8}} />
-			</Link>
-			Content details
-		</>
-	);
-
 	// === Switch change event handler
 	const onSwitchChange = val => {
 		setDisableQuiz(val);
-	}
+	};
 
 	// === Form rules and validation
 	const onFinishFailed = errorInfo => {
-		console.log('Failed:', errorInfo);
-	 };
+		console.log("Failed:", errorInfo);
+	};
 
 	const stringRules = {
 		required: true,
@@ -183,32 +195,32 @@ export default function ContentForm({
 		enum: "${label} must be one of [${enum}]",
 		whitespace: "${label} cannot be empty",
 		date: {
-		  format: "${label} is invalid for format date",
-		  parse: "${label} could not be parsed as date",
-		  invalid: "${label} is invalid date",
+			format: "${label} is invalid for format date",
+			parse: "${label} could not be parsed as date",
+			invalid: "${label} is invalid date",
 		},
 		string: {
-		  len: "${label} must be exactly ${len} characters",
-		  min: "${label} must be at least ${min} characters",
-		  max: "${label} cannot be longer than ${max} characters",
-		  range: "${label} must be between ${min} and ${max} characters",
+			len: "${label} must be exactly ${len} characters",
+			min: "${label} must be at least ${min} characters",
+			max: "${label} cannot be longer than ${max} characters",
+			range: "${label} must be between ${min} and ${max} characters",
 		},
 		number: {
-		  len: "${label} must equal ${len}",
-		  min: "${label} cannot be less than ${min}",
-		  max: "${label} cannot be greater than ${max}",
-		  range: "${label} must be between ${min} and ${max}",
+			len: "${label} must equal ${len}",
+			min: "${label} cannot be less than ${min}",
+			max: "${label} cannot be greater than ${max}",
+			range: "${label} must be between ${min} and ${max}",
 		},
 		array: {
-		  len: "${label} must be exactly ${len} in length",
-		  min: "${label} cannot be less than ${min} in length",
-		  max: "${label} cannot be greater than ${max} in length",
-		  range: "${label} must be between ${min} and ${max} in length",
+			len: "${label} must be exactly ${len} in length",
+			min: "${label} cannot be less than ${min} in length",
+			max: "${label} cannot be greater than ${max} in length",
+			range: "${label} must be between ${min} and ${max} in length",
 		},
 		pattern: {
-		  mismatch: "${label} does not match pattern ${pattern}",
+			mismatch: "${label} does not match pattern ${pattern}",
 		},
-	}
+	};
 
 	// === Upload button
 	const uploadProps = {
@@ -219,9 +231,16 @@ export default function ContentForm({
 		onChange: info => {
 			console.log("UPLOAD INFO");
 			console.log(info);
+
 			setFileList(info.fileList);
 
+			if (info.file.status === "uploading") {
+				setFormLoading(true);
+				return;
+			}
+
 			if (info.file.status === "error") {
+				setFormLoading(false);
 				setFileList([
 					{
 						...info.file,
@@ -229,6 +248,10 @@ export default function ContentForm({
 						status: "done",
 					},
 				]);
+			}
+
+			if (info.file.status === "done") {
+				setFormLoading(false);
 			}
 		},
 		beforeUpload: file => {
@@ -263,6 +286,14 @@ export default function ContentForm({
 		</div>
 	);
 
+	const cardHeader = (
+		<>
+			<Link href="/content/list">
+				<ArrowLeftOutlined style={{marginRight: 8}} />
+			</Link>
+			Content details
+		</>
+	);
 
 	return (
 		<>
@@ -274,7 +305,7 @@ export default function ContentForm({
 			>
 				<img alt="thumbnail" style={{width: "100%"}} src={previewImage} />
 			</Modal>
-			<Card title={title} bordered={false} style={{width: "100%"}}>
+			<Card title={cardHeader} bordered={false} style={{width: "100%"}}>
 				<Skeleton active loading={isLoading}>
 					<Form
 						wrapperCol={{span: 14}}
@@ -305,7 +336,11 @@ export default function ContentForm({
 								},
 							]}
 						>
-							<Input.TextArea autoSize={{minRows: 3, maxRows: 6}} showCount maxLength={255}/>
+							<Input.TextArea
+								autoSize={{minRows: 3, maxRows: 6}}
+								showCount
+								maxLength={255}
+							/>
 						</Form.Item>
 						<Form.Item
 							label="Category"
@@ -333,7 +368,12 @@ export default function ContentForm({
 									...stringRules,
 								},
 							]}
-							extra={<p>Example: https://www.youtube.com/watch?v=<b>Ok5v511qbko</b>. The bold text is the ID</p>}
+							extra={
+								<p>
+									Example: https://www.youtube.com/watch?v=
+									<b>Ok5v511qbko</b>. The bold text is the ID
+								</p>
+							}
 						>
 							<Input />
 						</Form.Item>
@@ -359,6 +399,23 @@ export default function ContentForm({
 							initialValue={0}
 						>
 							<Switch onChange={onSwitchChange} />
+						</Form.Item>
+						<Form.Item shouldUpdate={true}>
+							{() => (
+								<Button
+									type="primary"
+									htmlType="submit"
+									loading={formLoading}
+									disabled={
+										// (!id_konten && !contentForm.isFieldsTouched(true)) ||
+										contentForm
+											.getFieldsError()
+											.filter(({errors}) => errors.length).length
+									}
+								>
+									Save
+								</Button>
+							)}
 						</Form.Item>
 					</Form>
 				</Skeleton>

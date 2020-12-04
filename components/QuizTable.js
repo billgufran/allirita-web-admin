@@ -1,6 +1,7 @@
 import { DeleteFilled, EditFilled } from "@ant-design/icons";
 import { Button, Modal, Space, Table } from "antd";
 import Form from "antd/lib/form";
+import Link from "next/link";
 import { useContext, useState } from "react";
 import api from "../services/api";
 import { AuthContext } from "./AuthContext";
@@ -102,6 +103,9 @@ export default function QuizTable({quizzes, isLoading, id_konten, getSelectedCon
 				getSelectedContent={getSelectedContent}
 				id={id}
 			/>
+			<Link href="/content/list" >
+				<Button style={{alignSelf: "flex-end", margin: 22}}>Save</Button>
+			</Link>
 		</>
 	);
 }
