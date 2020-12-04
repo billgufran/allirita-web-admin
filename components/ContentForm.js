@@ -26,7 +26,6 @@ export default function ContentForm({
 	contentForm,
 	isLoading,
 	imageName,
-	setDisableQuiz,
 	carouselRef,
 }) {
 	const [categories, setCategories] = useState([]);
@@ -171,11 +170,6 @@ export default function ContentForm({
 
 		id_konten ? updateContent(value, id_konten) : createContent(value);
 	}, []);
-
-	// === Switch change event handler
-	const onSwitchChange = val => {
-		setDisableQuiz(val);
-	};
 
 	// === Form rules and validation
 	const onFinishFailed = errorInfo => {
@@ -398,7 +392,7 @@ export default function ContentForm({
 							valuePropName="checked"
 							initialValue={0}
 						>
-							<Switch onChange={onSwitchChange} />
+							<Switch />
 						</Form.Item>
 						<Form.Item shouldUpdate={true}>
 							{() => (
