@@ -60,7 +60,6 @@ export default function ContentTable({content, getContent, isLoading}) {
 				//"text" refer to data id
 				<Space size="middle">
 					<Link
-						// href={`/content/create?id=${text}`}
 						href={{
 							pathname: '/content/create',
 							query: { id: text },

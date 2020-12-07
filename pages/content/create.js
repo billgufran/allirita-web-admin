@@ -10,10 +10,6 @@ import api from '../../services/api';
 export default function Create() {
 
 	const router = useRouter();
-	// const {id} = router.query;
-
-	// console.log("Router")
-	// console.log(router)
 
 	const [contentForm] = Form.useForm();
 
@@ -43,9 +39,8 @@ export default function Create() {
 			content["image"] = null
 			contentForm.setFieldsValue(content);
 
-
-			console.log("GET CONTENT RESPONSE")
-			console.log(content)
+			// console.log("GET CONTENT RESPONSE")
+			// console.log(content)
 
 			// set data for quiz table
 			const quizData = res.data.data.pertanyaan.map((el, i) => ({
@@ -62,7 +57,6 @@ export default function Create() {
 
 	// === Effect
 	useEffect(() => {
-		// id_konten only presents when editing data
 		setContentId(router?.query?.id)
 
 		if (!!contentId) {
