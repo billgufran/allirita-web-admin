@@ -82,11 +82,9 @@ export default function ContentForm({
 				query: { id: id_konten },
 			 }
 
-			console.log("Created ✅")
-
 			successNotifcation(true);
 
-			// console.log("POST RESULT");
+			// console.log("Created ✅. POST RESULT");
 			// console.log(res);
 
 			if (!value.question_is_disabled) {// question_is_disabled = 0 (the question is enabled)
@@ -111,11 +109,9 @@ export default function ContentForm({
 				headers: {Authorization: `Bearer ${user.token}`},
 			});
 
-			console.log("Updated 🔃")
-
 			successNotifcation(false);
 
-			// console.log("PUT RESULT");
+			// console.log("Updated 🔃. PUT RESULT");
 			// console.log(res);
 
 			if (!value.question_is_disabled) {// question_is_disabled = 0 (the question is enabled)
@@ -143,7 +139,6 @@ export default function ContentForm({
 	};
 
 	// === Effect
-
 	useEffect(() => {
 		getCategory();
 	}, []);
@@ -164,24 +159,6 @@ export default function ContentForm({
 	}, [imageName]);
 
 	// === Form submit handler
-	// const onSubmit = useCallback(async value => {
-	// 	value["question_is_disabled"] = +value.question_is_disabled;
-
-	// 	if (value.image) {
-	// 		const imageBase64 = await getBase64(value.image.file.originFileObj);
-	// 		value["image"] = imageBase64.substring(
-	// 			imageBase64.indexOf(",", imageBase64.indexOf(";base64")) + 1
-	// 		);
-	// 	}
-
-	// 	// console.log("SUBMITTED VALUE");
-	// 	// console.log(value);
-
-	// 	console.log(`is edit? ${!!contentId}`)
-
-	// 	!!contentId ? updateContent(value, contentId) : createContent(value);
-	// }, []);
-
 	const onSubmit = async value => {
 		value["question_is_disabled"] = +value.question_is_disabled;
 
@@ -195,7 +172,7 @@ export default function ContentForm({
 		// console.log("SUBMITTED VALUE");
 		// console.log(value);
 
-		console.log(`is edit? ${!!contentId}`)
+		// console.log(`is edit? ${!!contentId}`)
 
 		!!contentId ? updateContent(value, contentId) : createContent(value);
 	}
@@ -430,7 +407,7 @@ export default function ContentForm({
 									htmlType="submit"
 									loading={formLoading}
 									// disabled={
-									// 	// (!id_konten && !contentForm.isFieldsTouched(true)) ||
+									// 	(!contentForm.isFieldsTouched(true)) ||
 									// 	contentForm
 									// 		.getFieldsError()
 									// 		.filter(({errors}) => errors.length).length
