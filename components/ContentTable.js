@@ -59,7 +59,13 @@ export default function ContentTable({content, getContent, isLoading}) {
 			render: (text, record) => (
 				//"text" refer to data id
 				<Space size="middle">
-					<Link href={`/content/edit/${text}`}>
+					<Link
+						// href={`/content/create?id=${text}`}
+						href={{
+							pathname: '/content/create',
+							query: { id: text },
+						 }}
+					>
 						<EditFilled />
 					</Link>
 					<DeleteFilled

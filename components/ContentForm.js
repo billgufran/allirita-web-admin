@@ -13,7 +13,7 @@ import {
 import Modal from "antd/lib/modal/Modal";
 import Link from "next/link";
 import { useRouter } from "next/router";
-import { useCallback, useContext, useEffect, useState } from "react";
+import { useContext, useEffect, useState } from "react";
 import api from "../services/api";
 import { AuthContext } from "./AuthContext";
 
@@ -22,7 +22,7 @@ const {Option} = Select;
 const imageBaseUrl = "https://allirita-api.upanastudio.com/storage";
 
 export default function ContentForm({
-	id_konten,
+	contentId,
 	contentForm,
 	isLoading,
 	imageName,
@@ -77,19 +77,24 @@ export default function ContentForm({
 				headers: {Authorization: `Bearer ${user.token}`},
 			});
 			const id_konten = res.data.data.konten.id_konten;
-			router.prefetch(`/content/edit/${id_konten}`);
+			const path = {
+				pathname: '/content/create',
+				query: { id: id_konten },
+			 }
+
+			console.log("Created ✅")
 
 			successNotifcation(true);
 
-			console.log("POST RESULT");
-			console.log(res);
+			// console.log("POST RESULT");
+			// console.log(res);
 
 			if (!value.question_is_disabled) {// question_is_disabled = 0 (the question is enabled)
-				router.push(`/content/edit/${id_konten}`);
+				router.push(path, path, { shallow: true })
+				carouselRef.current.next();
 			} else {
 				router.push("/content/list");
 			}
-			// carouselRef.current.next();
 		} catch (error) {
 			console.log(error);
 			failedNotification();
@@ -105,10 +110,13 @@ export default function ContentForm({
 			const res = await api.put(`/konten/${id_konten}`, value, {
 				headers: {Authorization: `Bearer ${user.token}`},
 			});
+
+			console.log("Updated 🔃")
+
 			successNotifcation(false);
 
-			console.log("PUT RESULT");
-			console.log(res);
+			// console.log("PUT RESULT");
+			// console.log(res);
 
 			if (!value.question_is_disabled) {// question_is_disabled = 0 (the question is enabled)
 				carouselRef.current.next();
@@ -135,6 +143,7 @@ export default function ContentForm({
 	};
 
 	// === Effect
+
 	useEffect(() => {
 		getCategory();
 	}, []);
@@ -155,7 +164,25 @@ export default function ContentForm({
 	}, [imageName]);
 
 	// === Form submit handler
-	const onSubmit = useCallback(async value => {
+	// const onSubmit = useCallback(async value => {
+	// 	value["question_is_disabled"] = +value.question_is_disabled;
+
+	// 	if (value.image) {
+	// 		const imageBase64 = await getBase64(value.image.file.originFileObj);
+	// 		value["image"] = imageBase64.substring(
+	// 			imageBase64.indexOf(",", imageBase64.indexOf(";base64")) + 1
+	// 		);
+	// 	}
+
+	// 	// console.log("SUBMITTED VALUE");
+	// 	// console.log(value);
+
+	// 	console.log(`is edit? ${!!contentId}`)
+
+	// 	!!contentId ? updateContent(value, contentId) : createContent(value);
+	// }, []);
+
+	const onSubmit = async value => {
 		value["question_is_disabled"] = +value.question_is_disabled;
 
 		if (value.image) {
@@ -165,11 +192,13 @@ export default function ContentForm({
 			);
 		}
 
-		console.log("SUBMITTED VALUE");
-		console.log(value);
+		// console.log("SUBMITTED VALUE");
+		// console.log(value);
 
-		id_konten ? updateContent(value, id_konten) : createContent(value);
-	}, []);
+		console.log(`is edit? ${!!contentId}`)
+
+		!!contentId ? updateContent(value, contentId) : createContent(value);
+	}
 
 	// === Form rules and validation
 	const onFinishFailed = errorInfo => {
@@ -400,12 +429,12 @@ export default function ContentForm({
 									type="primary"
 									htmlType="submit"
 									loading={formLoading}
-									disabled={
-										// (!id_konten && !contentForm.isFieldsTouched(true)) ||
-										contentForm
-											.getFieldsError()
-											.filter(({errors}) => errors.length).length
-									}
+									// disabled={
+									// 	// (!id_konten && !contentForm.isFieldsTouched(true)) ||
+									// 	contentForm
+									// 		.getFieldsError()
+									// 		.filter(({errors}) => errors.length).length
+									// }
 								>
 									Save
 								</Button>
