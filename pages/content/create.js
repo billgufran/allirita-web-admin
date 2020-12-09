@@ -43,11 +43,7 @@ export default function Create() {
 			// console.log(content)
 
 			// set data for quiz table
-			const quizData = res.data.data.pertanyaan.map((el, i) => ({
-				...el,
-				no: i + 1,
-			}));
-			setQuizzes(quizData);
+			setQuizzes(res.data.data.pertanyaan);
 		} catch (error) {
 			console.log(error);
 		} finally {

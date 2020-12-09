@@ -57,9 +57,6 @@ export default function Sidebar({children, select}) {
 						padding: "24px 16px",
 						overflow: "initial",
 						minHeight: "100vh",
-						display: "flex",
-						flexDirection: "column",
-						justifyContent: "space-between",
 					}}
 				>
 					{children}
