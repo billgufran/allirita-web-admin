@@ -4,7 +4,7 @@ import {
 	Card,
 	Form,
 	Input,
-	notification,
+	message, notification,
 	Select,
 	Skeleton,
 	Switch,
@@ -207,11 +207,28 @@ export default function ContentForm({
 		name: "thumbnail",
 		listType: "picture-card",
 		accept: ".jpeg,.jpg,.png,.gif,.svg,",
+		beforeUpload: file => {
+			const isFormatCorrect =
+				file.type === "image/jpeg" ||
+				file.type === "image/jpg" ||
+				file.type === "image/png" ||
+				file.type === "image/gif" ||
+				file.type === "image/svg";
+			// file size less than 1 MB
+			const isLt1M = file.size / 1024 / 1024 < 1
+			if (!isFormatCorrect) {
+				message.error(`${file.name} format is not supported`, 7);
+			}
+			if (!isLt1M) {
+				message.error(`Image size must be smaller than 1MB`, 7)
+			}
+			return isFormatCorrect && isLt1M;
+		},
 		onChange: info => {
-			console.log("UPLOAD INFO");
-			console.log(info);
+			// console.log("UPLOAD INFO");
+			// console.log(info);
 
-			setFileList(info.fileList);
+			setFileList(info.fileList.filter(file => !!file.status))
 
 			if (info.file.status === "uploading") {
 				setFormLoading(true);
@@ -227,23 +244,12 @@ export default function ContentForm({
 						status: "done",
 					},
 				]);
+				return;
 			}
 
 			if (info.file.status === "done") {
 				setFormLoading(false);
 			}
-		},
-		beforeUpload: file => {
-			const isFormatCorrect =
-				file.type === "image/jpeg" ||
-				file.type === "image/jpg" ||
-				file.type === "image/png" ||
-				file.type === "image/gif" ||
-				file.type === "image/svg";
-			if (!isFormatCorrect) {
-				message.error(`${file.name} format is not supported`);
-			}
-			return isFormatCorrect;
 		},
 		onPreview: async file => {
 			if (!file.url && !file.preview) {
