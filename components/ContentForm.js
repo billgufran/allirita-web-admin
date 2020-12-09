@@ -13,7 +13,7 @@ import {
 import Modal from "antd/lib/modal/Modal";
 import Link from "next/link";
 import { useRouter } from "next/router";
-import { useCallback, useContext, useEffect, useState } from "react";
+import { useContext, useEffect, useState } from "react";
 import api from "../services/api";
 import { AuthContext } from "./AuthContext";
 
@@ -22,11 +22,10 @@ const {Option} = Select;
 const imageBaseUrl = "https://allirita-api.upanastudio.com/storage";
 
 export default function ContentForm({
-	id_konten,
+	contentId,
 	contentForm,
 	isLoading,
 	imageName,
-	setDisableQuiz,
 	carouselRef,
 }) {
 	const [categories, setCategories] = useState([]);
@@ -78,19 +77,22 @@ export default function ContentForm({
 				headers: {Authorization: `Bearer ${user.token}`},
 			});
 			const id_konten = res.data.data.konten.id_konten;
-			router.prefetch(`/content/edit/${id_konten}`);
+			const path = {
+				pathname: '/content/create',
+				query: { id: id_konten },
+			 }
 
 			successNotifcation(true);
 
-			console.log("POST RESULT");
-			console.log(res);
+			// console.log("Created ✅. POST RESULT");
+			// console.log(res);
 
 			if (!value.question_is_disabled) {// question_is_disabled = 0 (the question is enabled)
-				router.push(`/content/edit/${id_konten}`);
+				router.push(path, path, { shallow: true })
+				carouselRef.current.next();
 			} else {
 				router.push("/content/list");
 			}
-			// carouselRef.current.next();
 		} catch (error) {
 			console.log(error);
 			failedNotification();
@@ -106,10 +108,11 @@ export default function ContentForm({
 			const res = await api.put(`/konten/${id_konten}`, value, {
 				headers: {Authorization: `Bearer ${user.token}`},
 			});
+
 			successNotifcation(false);
 
-			console.log("PUT RESULT");
-			console.log(res);
+			// console.log("Updated 🔃. PUT RESULT");
+			// console.log(res);
 
 			if (!value.question_is_disabled) {// question_is_disabled = 0 (the question is enabled)
 				carouselRef.current.next();
@@ -156,7 +159,7 @@ export default function ContentForm({
 	}, [imageName]);
 
 	// === Form submit handler
-	const onSubmit = useCallback(async value => {
+	const onSubmit = async value => {
 		value["question_is_disabled"] = +value.question_is_disabled;
 
 		if (value.image) {
@@ -166,16 +169,13 @@ export default function ContentForm({
 			);
 		}
 
-		console.log("SUBMITTED VALUE");
-		console.log(value);
+		// console.log("SUBMITTED VALUE");
+		// console.log(value);
 
-		id_konten ? updateContent(value, id_konten) : createContent(value);
-	}, []);
+		// console.log(`is edit? ${!!contentId}`)
 
-	// === Switch change event handler
-	const onSwitchChange = val => {
-		setDisableQuiz(val);
-	};
+		!!contentId ? updateContent(value, contentId) : createContent(value);
+	}
 
 	// === Form rules and validation
 	const onFinishFailed = errorInfo => {
@@ -192,33 +192,12 @@ export default function ContentForm({
 	const defaultValidateMessages = {
 		default: "Validation error on field ${label}",
 		required: "${label} is required",
-		enum: "${label} must be one of [${enum}]",
 		whitespace: "${label} cannot be empty",
-		date: {
-			format: "${label} is invalid for format date",
-			parse: "${label} could not be parsed as date",
-			invalid: "${label} is invalid date",
-		},
 		string: {
 			len: "${label} must be exactly ${len} characters",
 			min: "${label} must be at least ${min} characters",
 			max: "${label} cannot be longer than ${max} characters",
 			range: "${label} must be between ${min} and ${max} characters",
-		},
-		number: {
-			len: "${label} must equal ${len}",
-			min: "${label} cannot be less than ${min}",
-			max: "${label} cannot be greater than ${max}",
-			range: "${label} must be between ${min} and ${max}",
-		},
-		array: {
-			len: "${label} must be exactly ${len} in length",
-			min: "${label} cannot be less than ${min} in length",
-			max: "${label} cannot be greater than ${max} in length",
-			range: "${label} must be between ${min} and ${max} in length",
-		},
-		pattern: {
-			mismatch: "${label} does not match pattern ${pattern}",
 		},
 	};
 
@@ -398,7 +377,7 @@ export default function ContentForm({
 							valuePropName="checked"
 							initialValue={0}
 						>
-							<Switch onChange={onSwitchChange} />
+							<Switch />
 						</Form.Item>
 						<Form.Item shouldUpdate={true}>
 							{() => (
@@ -407,7 +386,6 @@ export default function ContentForm({
 									htmlType="submit"
 									loading={formLoading}
 									disabled={
-										// (!id_konten && !contentForm.isFieldsTouched(true)) ||
 										contentForm
 											.getFieldsError()
 											.filter(({errors}) => errors.length).length

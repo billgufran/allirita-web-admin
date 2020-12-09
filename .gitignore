@@ -38,3 +38,5 @@ yarn-error.log*
 
 # dummy data
 /dummy_data
+
+/pages/testpage.js

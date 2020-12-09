@@ -7,6 +7,7 @@ export default function UserTable({users, isLoading}) {
 			title: "No",
 			dataIndex: "no",
 			key: "no",
+			render: (text, record, index) => index + 1
 		},
 		{
 			title: "Name",

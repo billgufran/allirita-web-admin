@@ -7,7 +7,7 @@ import api from "../services/api";
 import { AuthContext } from "./AuthContext";
 import QuizModal from "./QuizModal";
 
-export default function QuizTable({quizzes, isLoading, id_konten, getSelectedContent}) {
+export default function QuizTable({quizzes, isLoading, contentId, getSelectedContent}) {
 
 	// MODAL
 	const [modalVisible, setModalVisible] = useState(false);
@@ -55,7 +55,7 @@ export default function QuizTable({quizzes, isLoading, id_konten, getSelectedCon
 						<EditFilled
 							onClick={() => {
 								quizForm.setFieldsValue(record);
-								setId({id_konten, id_pertanyaan});
+								setId({contentId, id_pertanyaan});
 								setModalVisible(true);
 							}}
 						/>
@@ -66,7 +66,7 @@ export default function QuizTable({quizzes, isLoading, id_konten, getSelectedCon
 									content: "Are you sure?",
 									centered: true,
 									onOk: () => {
-										deleteData(id_konten, id_pertanyaan);
+										deleteData(contentId, id_pertanyaan);
 									},
 								})
 							}

@@ -27,6 +27,7 @@ export default function ContentTable({content, getContent, isLoading}) {
 			title: "No",
 			dataIndex: "no",
 			key: "no",
+			render: (text, record, index) => index + 1
 		},
 		{
 			title: "Title",
@@ -59,7 +60,12 @@ export default function ContentTable({content, getContent, isLoading}) {
 			render: (text, record) => (
 				//"text" refer to data id
 				<Space size="middle">
-					<Link href={`/content/edit/${text}`}>
+					<Link
+						href={{
+							pathname: '/content/create',
+							query: { id: text },
+						 }}
+					>
 						<EditFilled />
 					</Link>
 					<DeleteFilled
