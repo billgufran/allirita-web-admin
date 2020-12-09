@@ -27,7 +27,7 @@ export default function ContentTable({content, getContent, isLoading}) {
 			title: "No",
 			dataIndex: "no",
 			key: "no",
-			render: (text, record, index) => index + 1
+			render: (text, record, index) => index + 1,
 		},
 		{
 			title: "Title",
