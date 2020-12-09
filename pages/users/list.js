@@ -20,11 +20,7 @@ export default function UsersList() {
 			const res = await api.get("/akun/semua", {
 				headers: {Authorization: `Bearer ${user.token}`},
 			});
-			const data = res.data.data.getUser.map((el, i) => ({
-				...el,
-				no: i + 1,
-			}));
-			setUsers(data);
+			setUsers(res.data.data.getUser);
 		} catch (error) {
 			console.log(error);
 		} finally {
