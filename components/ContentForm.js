@@ -276,7 +276,7 @@ export default function ContentForm({
 			<Link href="/content/list">
 				<ArrowLeftOutlined style={{marginRight: 8}} />
 			</Link>
-			Content details
+			Content list
 		</>
 	);
 
@@ -290,7 +290,7 @@ export default function ContentForm({
 			>
 				<img alt="thumbnail" style={{width: "100%"}} src={previewImage} />
 			</Modal>
-			<Card title={cardHeader} bordered={false} style={{minWidth: "50vw", maxWidth: "57vw"}}>
+			<Card title={cardHeader} bordered={false} >
 				<Skeleton active loading={isLoading}>
 					<Form
 						wrapperCol={{span: 14}}
