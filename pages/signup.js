@@ -1,6 +1,6 @@
 import { Button, Card, Form, Input, Layout } from "antd";
 import { useRouter } from "next/router";
-import React, { useContext } from "react";
+import React, { useContext, useEffect } from "react";
 import { AuthContext } from "../components/AuthContext";
 
 const {Content} = Layout;
@@ -12,7 +12,7 @@ export default function SignUp() {
 	const router = useRouter()
 
 	useEffect(() => {
-		if(process.env.NODE_ENV === "development") router.push("/login")
+		process.env.NODE_ENV !== "development" && router.push("/")
 	}, [])
 
 	const onFinish = values => {
