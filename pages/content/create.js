@@ -53,8 +53,10 @@ export default function Create() {
 
 	// === Effect
 	useEffect(() => {
-		setContentId(router?.query?.id)
+		setContentId(router.query.id)
+	}, [router.pathname, router.query]);
 
+	useEffect(() => {
 		if (!!contentId) {
 			console.log("getting content")
 			getSelectedContent(contentId);
@@ -62,7 +64,7 @@ export default function Create() {
 			console.log("id is not present")
 			contentForm.resetFields();
 		}
-	}, [router.pathname, router.query, contentId]);
+	}, [contentId]);
 
 	const props = {
 		contentId,
