@@ -4,7 +4,7 @@ import Link from "next/link";
 import React, { useContext } from "react";
 import { AuthContext } from "../components/AuthContext";
 
-const {Content} = Layout;
+const {Content, Footer} = Layout;
 
 export default function Login() {
 
@@ -19,7 +19,7 @@ export default function Login() {
 		<Layout style={{minHeight: "100vh"}}>
 			<Content
 				style={{
-					height: "100%",
+					height: "95%",
 					display: "flex",
 					flexDirection: "column",
 					justifyContent: "center",
@@ -82,6 +82,20 @@ export default function Login() {
 					</Form>
 				</Card>
 			</Content>
+			<Footer
+				style={{
+					height: "95%",
+					display: "flex",
+					flexDirection: "column",
+					justifyContent: "center",
+					alignItems: "center",
+					opacity:"0.5"
+				}}
+			>
+				<Link href="/policy">
+					<Button type="link">privacy policy</Button>
+				</Link>
+			</Footer>
 		</Layout>
 	);
 }
