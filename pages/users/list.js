@@ -35,7 +35,9 @@ export default function UsersList() {
 
 	return (
 		<Sidebar select="2">
-			<Card style={{minWidth: "70vw", maxWidth: "80vw"}}>
+			<Card
+				title="User list"
+				style={{maxWidth: "70vw"}}>
 			<UserTable users={users} isLoading={isLoading} />
 			</Card>
 		</Sidebar>
