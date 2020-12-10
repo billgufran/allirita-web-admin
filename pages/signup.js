@@ -1,4 +1,5 @@
 import { Button, Card, Form, Input, Layout } from "antd";
+import { useRouter } from "next/router";
 import React, { useContext } from "react";
 import { AuthContext } from "../components/AuthContext";
 
@@ -7,6 +8,12 @@ const {Content} = Layout;
 export default function SignUp() {
 
 	const {signUp} = useContext(AuthContext);
+
+	const router = useRouter()
+
+	useEffect(() => {
+		if(process.env.NODE_ENV === "development") router.push("/login")
+	}, [])
 
 	const onFinish = values => {
 		const {name, email, password} = values
@@ -24,7 +31,6 @@ export default function SignUp() {
 					alignItems: "center",
 				}}
 			>
-				{/* <img src="/logo.png" alt="Allirita logo" width={300} /> */}
 				<Card style={{minWidth: 350}}>
 					<Form
 						name="signup"
