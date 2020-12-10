@@ -1,3 +1,4 @@
+import { Card } from "antd";
 import { useContext, useEffect, useState } from "react";
 import { AuthContext } from "../../components/AuthContext";
 import Sidebar from "../../components/SidebarLayout";
@@ -17,7 +18,7 @@ export default function UsersList() {
 			setIsLoading(true);
 
 			// API: GET get user
-			const res = await api.get("/akun/semua", {
+			const res = await api.get("/akun/semua/index", {
 				headers: {Authorization: `Bearer ${user.token}`},
 			});
 			setUsers(res.data.data.getUser);
@@ -34,7 +35,9 @@ export default function UsersList() {
 
 	return (
 		<Sidebar select="2">
+			<Card style={{minWidth: "70vw", maxWidth: "80vw"}}>
 			<UserTable users={users} isLoading={isLoading} />
+			</Card>
 		</Sidebar>
 	);
 }

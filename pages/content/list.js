@@ -1,5 +1,5 @@
 import { PlusOutlined } from "@ant-design/icons";
-import { Button } from "antd";
+import { Button, Card } from "antd";
 import Link from "next/link";
 import { useContext, useEffect, useState } from "react";
 import { AuthContext } from "../../components/AuthContext";
@@ -23,11 +23,7 @@ export default function ContentList() {
 			const res = await api.get("/konten", {
 				headers: {Authorization: `Bearer ${user.token}`},
 			});
-			const data = res.data.data.konten.map((el, i) => ({
-				...el,
-				no: i + 1,
-			}));
-			setContent(data);
+			setContent(res.data.data.konten);
 		} catch (error) {
 			console.log(error);
 		} finally {
@@ -41,22 +37,27 @@ export default function ContentList() {
 
 	return (
 		<Sidebar select="1">
-			<ContentTable
-				content={content}
-				getContent={getContent}
-				isLoading={isLoading}
-			/>
-			<Link href="/content/create">
-				<Button
-					type="primary"
-					shape="round"
-					icon={<PlusOutlined />}
-					size="large"
-					style={{alignSelf: "flex-end"}}
-				>
-					New Item
-				</Button>
-			</Link>
+			<Card
+				title="Content list"
+				extra={
+					<Link href="/content/create">
+						<Button
+							type="primary"
+							shape="round"
+							icon={<PlusOutlined />}
+							size="large"
+						>
+							New Item
+						</Button>
+					</Link>
+				}
+			>
+				<ContentTable
+					content={content}
+					getContent={getContent}
+					isLoading={isLoading}
+				/>
+			</Card>
 		</Sidebar>
 	);
 }

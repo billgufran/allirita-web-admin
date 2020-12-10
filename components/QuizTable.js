@@ -35,6 +35,7 @@ export default function QuizTable({quizzes, isLoading, contentId, getSelectedCon
 			title: "No",
 			dataIndex: "no",
 			key: "no",
+			render: (text, record, index) => index + 1,
 		},
 		{
 			title: "Question",

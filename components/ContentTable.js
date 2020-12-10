@@ -1,5 +1,5 @@
 import { DeleteFilled, EditFilled } from "@ant-design/icons";
-import { Modal, Space, Table, Tag } from "antd";
+import { Button, Modal, Space, Table, Tag } from "antd";
 import Link from "next/link";
 import { useContext } from "react";
 import api from "../services/api";
@@ -27,7 +27,7 @@ export default function ContentTable({content, getContent, isLoading}) {
 			title: "No",
 			dataIndex: "no",
 			key: "no",
-			render: (text, record, index) => index + 1
+			render: (text, record, index) => index + 1,
 		},
 		{
 			title: "Title",
@@ -57,6 +57,7 @@ export default function ContentTable({content, getContent, isLoading}) {
 			title: "Action",
 			dataIndex: "id_konten",
 			key: "id_konten",
+			align: "center",
 			render: (text, record) => (
 				//"text" refer to data id
 				<Space size="middle">
@@ -66,20 +67,27 @@ export default function ContentTable({content, getContent, isLoading}) {
 							query: { id: text },
 						 }}
 					>
-						<EditFilled />
+						<Button
+							icon={<EditFilled />}
+						>
+							Edit
+						</Button>
 					</Link>
-					<DeleteFilled
-						onClick={() =>
-							Modal.confirm({
-								title: "Delete content",
-								content: "Are you sure?",
-								centered: true,
-								onOk: () => {
-									deleteData(text)
-								},
-							})
-						}
-					/>
+						<Button
+							icon={<DeleteFilled />}
+							onClick={() =>
+								Modal.confirm({
+									title: "Delete content",
+									content: "Are you sure?",
+									centered: true,
+									onOk: () => {
+										deleteData(text)
+									},
+								})
+							}
+						>
+							Delete
+						</Button>
 				</Space>
 			),
 		},

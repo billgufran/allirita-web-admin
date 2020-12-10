@@ -110,25 +110,32 @@ export default function AuthProvider(props) {
 	// === Effect
 	// redirect if not logged in
 	useEffect(() => {
-		const handleRouteChange = url => {
-			if (url !== "/login" && url !== "/signup" && !user) {
-				router.push("/login");
-			}
-		};
-
-		if (
+		const privateRoute =
 			router.pathname !== "/login" &&
 			router.pathname !== "/signup" &&
-			user === null
-		) {
-			router.push("/login");
+			router.pathname !== "/policy" &&
+			!user
+
+		if(privateRoute) {
+			router.push("/login")
 		}
 
-		router.events.on("routeChangeStart", handleRouteChange);
-		return () => {
-			router.events.off("routeChangeStart", handleRouteChange);
-		};
-	}, [user]);
+		// const handleRouteChange = url => {
+		// 	if (
+		// 		url !== "/login" &&
+		// 		url !== "/signup" &&
+		// 		url !== "/policy" &&
+		// 		!user
+		// 	) {
+		// 		router.push("/login");
+		// 	}
+		// };
+
+		// router.events.on("routeChangeStart", handleRouteChange);
+		// return () => {
+		// 	router.events.off("routeChangeStart", handleRouteChange);
+		// };
+	}, [user, router.pathname]);
 
 	// constatntly check token validity
 	useEffect(() => {
