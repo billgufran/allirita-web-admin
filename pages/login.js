@@ -92,7 +92,7 @@ export default function Login() {
 					opacity:"0.5"
 				}}
 			>
-				<Link href="/policy">
+				<Link href="/privacy">
 					<Button type="link">privacy policy</Button>
 				</Link>
 			</Footer>
