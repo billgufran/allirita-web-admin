@@ -84,9 +84,6 @@ export default function ContentForm({
 
 			successNotifcation(true);
 
-			// console.log("Created ✅. POST RESULT");
-			// console.log(res);
-
 			if (!value.question_is_disabled) {// question_is_disabled = 0 (the question is enabled)
 				router.push(path, path, { shallow: true })
 				carouselRef.current.next();
@@ -110,9 +107,6 @@ export default function ContentForm({
 			});
 
 			successNotifcation(false);
-
-			// console.log("Updated 🔃. PUT RESULT");
-			// console.log(res);
 
 			if (!value.question_is_disabled) {// question_is_disabled = 0 (the question is enabled)
 				carouselRef.current.next();
@@ -139,6 +133,7 @@ export default function ContentForm({
 	};
 
 	// === Effect
+	//	*	Need optimization  *
 	useEffect(() => {
 		getCategory();
 	}, []);
@@ -168,11 +163,6 @@ export default function ContentForm({
 				imageBase64.indexOf(",", imageBase64.indexOf(";base64")) + 1
 			);
 		}
-
-		// console.log("SUBMITTED VALUE");
-		// console.log(value);
-
-		// console.log(`is edit? ${!!contentId}`)
 
 		!!contentId ? updateContent(value, contentId) : createContent(value);
 	}
@@ -225,9 +215,6 @@ export default function ContentForm({
 			return isFormatCorrect && isLt1M;
 		},
 		onChange: info => {
-			// console.log("UPLOAD INFO");
-			// console.log(info);
-
 			setFileList(info.fileList.filter(file => !!file.status))
 
 			if (info.file.status === "uploading") {
@@ -290,7 +277,7 @@ export default function ContentForm({
 			>
 				<img alt="thumbnail" style={{width: "100%"}} src={previewImage} />
 			</Modal>
-			<Card title={cardHeader} bordered={false} >
+			<Card title={cardHeader} bordered={false} style={{maxWidth: "70vw"}}>
 				<Skeleton active loading={isLoading}>
 					<Form
 						wrapperCol={{span: 14}}
