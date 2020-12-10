@@ -53,8 +53,7 @@ export default function AuthProvider(props) {
 	};
 
 
-
-
+	// === functions
 	const login = async (email, password) => {
 		try {
 			setIsLoading(true);
@@ -62,10 +61,10 @@ export default function AuthProvider(props) {
 				email,
 				password,
 			});
-			if(res.data.isError) {
-				loginFailedNotification()
+			if (res.data.isError) {
+				loginFailedNotification();
 			} else {
-				setUser({email, token: res.data.data.token});
+				setUser({email, token: res.data.data.token, id_role: res.data.data.id_role});
 				router.push("/content/list");
 			}
 		} catch (err) {
@@ -88,23 +87,17 @@ export default function AuthProvider(props) {
 	};
 
 	const checkToken = async () => {
-		console.log("checking token...");
 		try {
 			const res = await api.get("/akun", {
 				headers: {
 					Authorization: `Bearer ${user.token}`,
 				},
 			});
-			setUser(prevState => ({
-				...prevState,
-				id_role: res.data.data.user.id_role,
-			}));
-			console.log("the token still valid");
 		} catch (err) {
-			console.log("the token is expired");
 			logout();
-			if(router.pathname !== "/privacy") {
-sessionExpiredNotification()};
+			if (router.pathname !== "/privacy" && router.pathname !== "/login") {
+				sessionExpiredNotification();
+			}
 		}
 	};
 
@@ -115,33 +108,18 @@ sessionExpiredNotification()};
 			router.pathname !== "/login" &&
 			router.pathname !== "/signup" &&
 			router.pathname !== "/privacy" &&
-			!user
+			!user;
 
-		if(privateRoute) {
-			router.push("/login")
+		if (privateRoute) {
+			router.push("/login");
 		}
 
-		// const handleRouteChange = url => {
-		// 	if (
-		// 		url !== "/login" &&
-		// 		url !== "/signup" &&
-		// 		url !== "/privacy" &&
-		// 		!user
-		// 	) {
-		// 		router.push("/login");
-		// 	}
-		// };
 
-		// router.events.on("routeChangeStart", handleRouteChange);
-		// return () => {
-		// 	router.events.off("routeChangeStart", handleRouteChange);
-		// };
 	}, [user, router.pathname]);
 
 	// constatntly check token validity
 	useEffect(() => {
 		if (router.pathname !== "/login" && router.pathname !== "/signup") {
-			console.log("Initialize token check");
 			checkToken();
 		}
 	}, [router.pathname]);
