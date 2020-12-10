@@ -113,7 +113,7 @@ export default function AuthProvider(props) {
 		const privateRoute =
 			router.pathname !== "/login" &&
 			router.pathname !== "/signup" &&
-			router.pathname !== "/policy" &&
+			router.pathname !== "/privacy" &&
 			!user
 
 		if(privateRoute) {
@@ -124,7 +124,7 @@ export default function AuthProvider(props) {
 		// 	if (
 		// 		url !== "/login" &&
 		// 		url !== "/signup" &&
-		// 		url !== "/policy" &&
+		// 		url !== "/privacy" &&
 		// 		!user
 		// 	) {
 		// 		router.push("/login");
