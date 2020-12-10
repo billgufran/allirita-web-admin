@@ -103,7 +103,8 @@ export default function AuthProvider(props) {
 		} catch (err) {
 			console.log("the token is expired");
 			logout();
-			sessionExpiredNotification();
+			if(router.pathname !== "/privacy") {
+sessionExpiredNotification()};
 		}
 	};
 
