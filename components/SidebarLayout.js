@@ -3,15 +3,21 @@ import {
 	ImportOutlined,
 	TeamOutlined
 } from "@ant-design/icons";
-import { Button, Layout, Menu } from "antd";
+import { Layout, Menu } from "antd";
 import Link from "next/link";
-import { useContext } from "react";
+import { useContext, useEffect, useState } from "react";
 import { AuthContext } from "./AuthContext";
 
 const {Content, Sider} = Layout;
 
 export default function Sidebar({children, select}) {
-	const {logout, checkToken, user} = useContext(AuthContext);
+	const {logout, user} = useContext(AuthContext);
+
+	const [role, setRole] = useState(0)
+
+	useEffect(() => {
+		setRole(user.id_role)
+	}, [user])
 
 	return (
 		<Layout>
@@ -27,11 +33,6 @@ export default function Sidebar({children, select}) {
 				}}
 			>
 				<Menu defaultSelectedKeys={[select]} mode="inline">
-
-					{process.env.NODE_ENV === "development" && (
-						<Button onClick={checkToken}>Check Token</Button>
-					)}
-
 					<img
 						src="/logo.png"
 						alt="Allirita logo"
@@ -41,7 +42,7 @@ export default function Sidebar({children, select}) {
 					<Menu.Item key="1" icon={<AppstoreOutlined />}>
 						<Link href="/content/list">Content</Link>
 					</Menu.Item>
-					{user?.id_role === 1 && (
+					{role === 1 && (
 						<Menu.Item key="2" icon={<TeamOutlined />}>
 							<Link href="/users/list">Users</Link>
 						</Menu.Item>
