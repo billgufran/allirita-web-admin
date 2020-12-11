@@ -7,12 +7,11 @@ import { AuthContext } from "../components/AuthContext";
 const {Content, Footer} = Layout;
 
 export default function Login() {
-
 	const {login, isLoading} = useContext(AuthContext);
 
 	const onFinish = values => {
-		const {email, password} = values
-		login(email, password)
+		const {email, password} = values;
+		login(email, password);
 	};
 
 	return (
@@ -76,8 +75,12 @@ export default function Login() {
 							>
 								Log in
 							</Button>
-							Or&nbsp;
-							<Link href="/signup">Sign Up</Link>
+							{process.env.NODE_ENV !== "development" && (
+								<>
+									<p>Or </p>
+									<Link href="/signup">Sign Up</Link>
+								</>
+							)}
 						</Form.Item>
 					</Form>
 				</Card>
@@ -89,7 +92,7 @@ export default function Login() {
 					flexDirection: "column",
 					justifyContent: "center",
 					alignItems: "center",
-					opacity:"0.5"
+					opacity: "0.5",
 				}}
 			>
 				<Link href="/privacy">
