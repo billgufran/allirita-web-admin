@@ -46,21 +46,26 @@ export default function QuizTable({quizzes, isLoading, contentId, getSelectedCon
 			title: "Answer",
 			dataIndex: "jawaban_benar",
 			key: "jawaban_benar",
+			render: (text) => text.toUpperCase(),
 		},
 		{
 			title: "Action",
 			dataIndex: "id_pertanyaan",
 			key: "id_pertanyaan",
+			align: "center",
 			render: (id_pertanyaan, record) => (
 					<Space size="middle">
-						<EditFilled
+						<Button
 							onClick={() => {
 								quizForm.setFieldsValue(record);
-								setId({contentId, id_pertanyaan});
+								setId({id_konten: contentId, id_pertanyaan});
 								setModalVisible(true);
 							}}
-						/>
-						<DeleteFilled
+							icon={<EditFilled/>}
+						>
+							Edit
+						</Button>
+						<Button
 							onClick={() =>
 								Modal.confirm({
 									title: "Delete question",
@@ -71,7 +76,10 @@ export default function QuizTable({quizzes, isLoading, contentId, getSelectedCon
 									},
 								})
 							}
-						/>
+							icon={<DeleteFilled/>}
+						>
+							Delete
+						</Button>
 					</Space>
 				)
 		},
@@ -82,7 +90,7 @@ export default function QuizTable({quizzes, isLoading, contentId, getSelectedCon
 			type="link"
 			onClick={() => {
 				quizForm.resetFields();
-				setId({id_konten});
+				setId({id_konten: contentId});
 				setModalVisible(true);
 			}}>
 			Add Question
@@ -91,18 +99,18 @@ export default function QuizTable({quizzes, isLoading, contentId, getSelectedCon
 
 	return (
 		<>
-			<Table
-				columns={columns}
-				dataSource={quizzes}
-				footer={footer}
-				loading={isLoading}
-			/>
 			<QuizModal
 				quizForm={quizForm}
 				visible={modalVisible}
 				setVisible={setModalVisible}
 				getSelectedContent={getSelectedContent}
 				id={id}
+			/>
+			<Table
+				columns={columns}
+				dataSource={quizzes}
+				footer={footer}
+				loading={isLoading}
 			/>
 			<Link href="/content/list" >
 				<Button style={{alignSelf: "flex-end", margin: 22}}>Save</Button>

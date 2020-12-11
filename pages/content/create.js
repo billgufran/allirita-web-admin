@@ -72,6 +72,7 @@ export default function Create() {
 		isLoading,
 		imageName,
 		quizzes,
+		getSelectedContent,
 	}
 
 	return <DetailViewLayout {...props}/>

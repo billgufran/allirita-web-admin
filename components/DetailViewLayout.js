@@ -11,6 +11,7 @@ export default function DetailViewLayout({
 	isLoading,
 	imageName,
 	quizzes,
+	getSelectedContent,
 }) {
 	const carouselRef = useRef();
 
@@ -53,6 +54,7 @@ export default function DetailViewLayout({
 						isLoading={isLoading}
 						contentId={contentId}
 						carouselRef={carouselRef}
+						getSelectedContent={getSelectedContent}
 					/>
 				</Card>
 			</Carousel>
