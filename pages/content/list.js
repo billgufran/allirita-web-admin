@@ -45,7 +45,7 @@ export default function ContentList() {
 							type="primary"
 							shape="round"
 							icon={<PlusOutlined />}
-							size="large"
+							size="medium"
 						>
 							New Item
 						</Button>

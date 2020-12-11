@@ -16,7 +16,7 @@ export default function Sidebar({children, select}) {
 	const [role, setRole] = useState(0)
 
 	useEffect(() => {
-		setRole(user.id_role)
+		setRole(user?.id_role)
 	}, [user])
 
 	return (
@@ -58,6 +58,10 @@ export default function Sidebar({children, select}) {
 						padding: "24px 16px",
 						overflow: "initial",
 						minHeight: "100vh",
+						width: "100%",
+						display: "flex",
+						flexDirection: "column",
+						placeItems: "center start",
 					}}
 				>
 					{children}

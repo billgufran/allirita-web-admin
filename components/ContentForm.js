@@ -277,7 +277,10 @@ export default function ContentForm({
 			>
 				<img alt="thumbnail" style={{width: "100%"}} src={previewImage} />
 			</Modal>
-			<Card title={cardHeader} bordered={false} style={{maxWidth: "70vw"}}>
+			<Card
+				title={cardHeader}
+				bordered={false}
+			>
 				<Skeleton active loading={isLoading}>
 					<Form
 						wrapperCol={{span: 14}}

@@ -28,7 +28,7 @@ export default function DetailViewLayout({
 
 	return (
 		<Sidebar select="1">
-			<Carousel dots={false} ref={carouselRef}>
+			<Carousel dots={false} ref={carouselRef} style={{width: "70vw", maxWidth: 700}}>
 				{/* Content Card */}
 				<ContentForm
 					contentId={contentId}
@@ -42,7 +42,6 @@ export default function DetailViewLayout({
 				<Card
 					title={cardHeader}
 					bordered={false}
-					style={{width: "100%"}}
 					bodyStyle={{
 						padding: 0,
 						display: "flex",
