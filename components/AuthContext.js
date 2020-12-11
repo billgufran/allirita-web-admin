@@ -88,7 +88,7 @@ export default function AuthProvider(props) {
 
 	const checkToken = async () => {
 		try {
-			const res = await api.get("/akun", {
+			await api.get("/akun", {
 				headers: {
 					Authorization: `Bearer ${user.token}`,
 				},
@@ -122,8 +122,6 @@ export default function AuthProvider(props) {
 			router.pathname === "/privacy"
 
 		if (!privateRoute) {
-			console.log("running")
-			console.log(router.pathname)
 			checkToken();
 		}
 	}, [router.pathname]);

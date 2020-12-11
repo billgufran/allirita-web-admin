@@ -39,9 +39,6 @@ export default function Create() {
 			content["image"] = null
 			contentForm.setFieldsValue(content);
 
-			// console.log("GET CONTENT RESPONSE")
-			// console.log(content)
-
 			// set data for quiz table
 			setQuizzes(res.data.data.pertanyaan);
 		} catch (error) {
@@ -58,10 +55,8 @@ export default function Create() {
 
 	useEffect(() => {
 		if (!!contentId) {
-			console.log("getting content")
 			getSelectedContent(contentId);
 		} else {
-			console.log("id is not present")
 			contentForm.resetFields();
 		}
 	}, [contentId]);
