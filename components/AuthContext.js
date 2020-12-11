@@ -95,9 +95,9 @@ export default function AuthProvider(props) {
 			});
 		} catch (err) {
 			logout();
-			if (router.pathname !== "/privacy" && router.pathname !== "/login") {
+			// if (router.pathname !== "/privacy" && router.pathname !== "/login") {
 				sessionExpiredNotification();
-			}
+
 		}
 	};
 
@@ -119,7 +119,8 @@ export default function AuthProvider(props) {
 
 	// constatntly check token validity
 	useEffect(() => {
-		if (router.pathname !== "/login" && router.pathname !== "/signup") {
+		// skip check token in specific page
+		if (router.pathname !== "/privacy" && router.pathname !== "/login") {
 			checkToken();
 		}
 	}, [router.pathname]);
