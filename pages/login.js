@@ -75,7 +75,7 @@ export default function Login() {
 							>
 								Log in
 							</Button>
-							{process.env.NODE_ENV !== "development" && (
+							{process.env.NODE_ENV === "development" && (
 								<>
 									<p>Or </p>
 									<Link href="/signup">Sign Up</Link>
