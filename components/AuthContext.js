@@ -95,7 +95,7 @@ export default function AuthProvider(props) {
 			});
 		} catch (err) {
 			logout();
-				sessionExpiredNotification();
+			sessionExpiredNotification();
 		}
 	};
 
@@ -111,14 +111,19 @@ export default function AuthProvider(props) {
 		if (privateRoute) {
 			router.push("/login");
 		}
-
-
 	}, [user, router.pathname]);
 
 	// constatntly check token validity
 	useEffect(() => {
 		// skip check token in specific page
-		if (router.pathname !== "/privacy" || router.pathname !== "/login" || router.pathname !== "/") {
+		const privateRoute =
+			router.pathname === "/" ||
+			router.pathname === "/login" ||
+			router.pathname === "/privacy"
+
+		if (!privateRoute) {
+			console.log("running")
+			console.log(router.pathname)
 			checkToken();
 		}
 	}, [router.pathname]);
